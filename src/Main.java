@@ -19,6 +19,7 @@ public class Main {
             BufferedReader lineReader = new BufferedReader(new FileReader(apiKeyFile));
             String apiKey = lineReader.readLine(); // need to read from file
             String accountId = lineReader.readLine();
+            String steamId3 = lineReader.readLine();
             //System.out.println(apiKey +"\n" + accountId);
 
             DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
