@@ -15,13 +15,15 @@ public class Main {
         //String apiKey = "";
 
         try {
-            File apiKeyFile = new File("text_files/DevKey.txtkey");
+            File apiKeyFile = new File("DevKey.txtkey");
             BufferedReader lineReader = new BufferedReader(new FileReader(apiKeyFile));
             String apiKey = lineReader.readLine(); // need to read from file
+            String accountId = lineReader.readLine();
+            //System.out.println(apiKey +"\n" + accountId);
 
             DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
-            Document web_XML = dBuilder.parse("https://api.steampowered.com/IDOTA2Match_570/GetMatchHistory/V001/?format=XML&key="+ apiKey);
+            Document web_XML = dBuilder.parse("https://api.steampowered.com/IDOTA2Match_570/GetMatchHistory/V001/?format=XML&account_id=" + accountId + "&key="+ apiKey);
             Element root = web_XML.getDocumentElement();
             System.out.print(root.getNodeName());
         }
