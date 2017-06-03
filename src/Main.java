@@ -38,24 +38,30 @@ public class Main {
 
             for (int temp = 0; temp < XMLmatches.getLength(); temp++) {
                 Node nNode = XMLmatches.item(temp);
-                System.out.println("Element " + temp + " :"
+                System.out.println("\nElement " + temp + " :"
                         + nNode.getNodeName());
 
                 if (nNode.getNodeType() == Node.ELEMENT_NODE) {
                     Element eElement = (Element) nNode;
                     /*System.out.println("Student roll no : "
                             + eElement.getAttribute("rollno"));*/
-                    System.out.println("First Name : "
+                    System.out.println("Match ID : "
                             + eElement
                             .getElementsByTagName("match_id")
                             .item(0)
                             .getTextContent());
+                    NodeList XMLplayers = eElement.getElementsByTagName("player");
+                    System.out.println("length" + XMLplayers.getLength());
+                    for (int i = 0; i < XMLplayers.getLength(); i++) {
+                        Element test = (Element) XMLplayers.item(i);
+                        System.out.println(test.getElementsByTagName("account_id").item(0).getTextContent());
+                    }
                     /*System.out.println("Last Name : "
                             + eElement
-                            .getElementsByTagName("lastname")
+                            .getElementsByTagName("player")
                             .item(0)
-                            .getTextContent());
-                    System.out.println("Nick Name : "
+                            .getTextContent());*/
+                    /*System.out.println("Nick Name : "
                             + eElement
                             .getElementsByTagName("nickname")
                             .item(0)
