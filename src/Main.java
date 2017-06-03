@@ -27,18 +27,47 @@ public class Main {
             DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
             Document web_XML = dBuilder.parse("https://api.steampowered.com/IDOTA2Match_570/GetMatchHistory/V001/?format=XML&account_id=" + accountId + "&key="+ apiKey);
-            Element root = web_XML.getDocumentElement();
-            System.out.println(root.getNodeName());
-            System.out.println("testing" + root.getAttributes().getNamedItem("num_results").getNodeValue());
+            web_XML.getDocumentElement().normalize();
 
-            /*NodeList XMLmatches = web_XML.getElementsByTagName("match");
-            System.out.println("NAME: " + XMLmatches.item(0).getNodeName());
+            System.out.println("Root element: "
+                    + web_XML.getDocumentElement().getNodeName());
 
-            Node nodeXML = XMLmatches.item(0);
-            System.out.println("nodeXML: " + nodeXML.getNodeName());
+            //System.out.println("testing" + root.getAttributes().getNamedItem("num_results").getNodeValue());
 
-            Element matchElement = (Element) XMLmatches.item(0);
-            System.out.println("test:" + matchElement.valueOf);*/
+            NodeList XMLmatches = web_XML.getElementsByTagName("match");
+
+            for (int temp = 0; temp < XMLmatches.getLength(); temp++) {
+                Node nNode = XMLmatches.item(temp);
+                System.out.println("Element " + temp + " :"
+                        + nNode.getNodeName());
+
+                if (nNode.getNodeType() == Node.ELEMENT_NODE) {
+                    Element eElement = (Element) nNode;
+                    /*System.out.println("Student roll no : "
+                            + eElement.getAttribute("rollno"));*/
+                    System.out.println("First Name : "
+                            + eElement
+                            .getElementsByTagName("match_id")
+                            .item(0)
+                            .getTextContent());
+                    /*System.out.println("Last Name : "
+                            + eElement
+                            .getElementsByTagName("lastname")
+                            .item(0)
+                            .getTextContent());
+                    System.out.println("Nick Name : "
+                            + eElement
+                            .getElementsByTagName("nickname")
+                            .item(0)
+                            .getTextContent());
+                    System.out.println("Marks : "
+                            + eElement
+                            .getElementsByTagName("marks")
+                            .item(0)
+                            .getTextContent());*/
+                }
+
+            }
         }
         catch (FileNotFoundException e) {
             System.out.println("File not present or file in wrong directory");
@@ -50,5 +79,52 @@ public class Main {
             System.out.println("HTTP Request failed, check api key");
         }
 
+
+       /* try {
+            File inputFile = new File("input.txt");
+            DocumentBuilderFactory dbFactory
+                    = DocumentBuilderFactory.newInstance();
+            DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+            Document doc = dBuilder.parse(inputFile);
+            doc.getDocumentElement().normalize();
+            System.out.println("Root element :"
+                    + doc.getDocumentElement().getNodeName());
+
+            NodeList nList = doc.getElementsByTagName("student");
+
+            System.out.println("----------------------------");
+            for (int temp = 0; temp < nList.getLength(); temp++) {
+                Node nNode = nList.item(temp);
+                System.out.println("\nCurrent Element :"
+                        + nNode.getNodeName());
+                if (nNode.getNodeType() == Node.ELEMENT_NODE) {
+                    Element eElement = (Element) nNode;
+                    System.out.println("Student roll no : "
+                            + eElement.getAttribute("rollno"));
+                    System.out.println("First Name : "
+                            + eElement
+                            .getElementsByTagName("firstname")
+                            .item(0)
+                            .getTextContent());
+                    System.out.println("Last Name : "
+                            + eElement
+                            .getElementsByTagName("lastname")
+                            .item(0)
+                            .getTextContent());
+                    System.out.println("Nick Name : "
+                            + eElement
+                            .getElementsByTagName("nickname")
+                            .item(0)
+                            .getTextContent());
+                    System.out.println("Marks : "
+                            + eElement
+                            .getElementsByTagName("marks")
+                            .item(0)
+                            .getTextContent());
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }*/
     }
 }
