@@ -1,6 +1,7 @@
 import jdk.nashorn.internal.runtime.ParserException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 
@@ -28,12 +29,16 @@ public class Main {
             Document web_XML = dBuilder.parse("https://api.steampowered.com/IDOTA2Match_570/GetMatchHistory/V001/?format=XML&account_id=" + accountId + "&key="+ apiKey);
             Element root = web_XML.getDocumentElement();
             System.out.println(root.getNodeName());
+            System.out.println("testing" + root.getAttributes().getNamedItem("num_results").getNodeValue());
 
-            NodeList XMLmatches = web_XML.getElementsByTagName("match");
+            /*NodeList XMLmatches = web_XML.getElementsByTagName("match");
             System.out.println("NAME: " + XMLmatches.item(0).getNodeName());
 
+            Node nodeXML = XMLmatches.item(0);
+            System.out.println("nodeXML: " + nodeXML.getNodeName());
+
             Element matchElement = (Element) XMLmatches.item(0);
-            System.out.println("test:" + matchElement.getAttribute("match_id"));
+            System.out.println("test:" + matchElement.valueOf);*/
         }
         catch (FileNotFoundException e) {
             System.out.println("File not present or file in wrong directory");
