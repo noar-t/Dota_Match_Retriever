@@ -1,6 +1,7 @@
 import jdk.nashorn.internal.runtime.ParserException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
 
 
 import javax.xml.parsers.DocumentBuilder;
@@ -26,7 +27,13 @@ public class Main {
             DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
             Document web_XML = dBuilder.parse("https://api.steampowered.com/IDOTA2Match_570/GetMatchHistory/V001/?format=XML&account_id=" + accountId + "&key="+ apiKey);
             Element root = web_XML.getDocumentElement();
-            System.out.print(root.getNodeName());
+            System.out.println(root.getNodeName());
+
+            NodeList XMLmatches = web_XML.getElementsByTagName("match");
+            System.out.println("NAME: " + XMLmatches.item(0).getNodeName());
+
+            Element matchElement = (Element) XMLmatches.item(0);
+            System.out.println("test:" + matchElement.getAttribute("match_id"));
         }
         catch (FileNotFoundException e) {
             System.out.println("File not present or file in wrong directory");
@@ -37,5 +44,6 @@ public class Main {
         catch (IOException e) {
             System.out.println("HTTP Request failed, check api key");
         }
+
     }
 }
