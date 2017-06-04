@@ -32,8 +32,6 @@ public class Main {
             System.out.println("Root element: "
                     + web_XML.getDocumentElement().getNodeName());
 
-            //System.out.println("testing" + root.getAttributes().getNamedItem("num_results").getNodeValue());
-
             NodeList XMLmatches = web_XML.getElementsByTagName("match");
 
             for (int temp = 0; temp < XMLmatches.getLength(); temp++) {
@@ -43,34 +41,28 @@ public class Main {
 
                 if (nNode.getNodeType() == Node.ELEMENT_NODE) {
                     Element eElement = (Element) nNode;
-                    /*System.out.println("Student roll no : "
-                            + eElement.getAttribute("rollno"));*/
+
                     System.out.println("Match ID : "
                             + eElement
                             .getElementsByTagName("match_id")
                             .item(0)
                             .getTextContent());
                     NodeList XMLplayers = eElement.getElementsByTagName("player");
-                    System.out.println("length" + XMLplayers.getLength());
+
                     for (int i = 0; i < XMLplayers.getLength(); i++) {
                         Element test = (Element) XMLplayers.item(i);
-                        System.out.println(test.getElementsByTagName("account_id").item(0).getTextContent());
+
+                        System.out.println("Account ID " + i + ": " + test
+                                .getElementsByTagName("account_id")
+                                .item(0)
+                                .getTextContent());
+
+                        System.out.println("Hero ID " + i + ": " + test
+                                .getElementsByTagName("hero_id")
+                                .item(0)
+                                .getTextContent());
                     }
-                    /*System.out.println("Last Name : "
-                            + eElement
-                            .getElementsByTagName("player")
-                            .item(0)
-                            .getTextContent());*/
-                    /*System.out.println("Nick Name : "
-                            + eElement
-                            .getElementsByTagName("nickname")
-                            .item(0)
-                            .getTextContent());
-                    System.out.println("Marks : "
-                            + eElement
-                            .getElementsByTagName("marks")
-                            .item(0)
-                            .getTextContent());*/
+
                 }
 
             }
@@ -85,52 +77,5 @@ public class Main {
             System.out.println("HTTP Request failed, check api key");
         }
 
-
-       /* try {
-            File inputFile = new File("input.txt");
-            DocumentBuilderFactory dbFactory
-                    = DocumentBuilderFactory.newInstance();
-            DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
-            Document doc = dBuilder.parse(inputFile);
-            doc.getDocumentElement().normalize();
-            System.out.println("Root element :"
-                    + doc.getDocumentElement().getNodeName());
-
-            NodeList nList = doc.getElementsByTagName("student");
-
-            System.out.println("----------------------------");
-            for (int temp = 0; temp < nList.getLength(); temp++) {
-                Node nNode = nList.item(temp);
-                System.out.println("\nCurrent Element :"
-                        + nNode.getNodeName());
-                if (nNode.getNodeType() == Node.ELEMENT_NODE) {
-                    Element eElement = (Element) nNode;
-                    System.out.println("Student roll no : "
-                            + eElement.getAttribute("rollno"));
-                    System.out.println("First Name : "
-                            + eElement
-                            .getElementsByTagName("firstname")
-                            .item(0)
-                            .getTextContent());
-                    System.out.println("Last Name : "
-                            + eElement
-                            .getElementsByTagName("lastname")
-                            .item(0)
-                            .getTextContent());
-                    System.out.println("Nick Name : "
-                            + eElement
-                            .getElementsByTagName("nickname")
-                            .item(0)
-                            .getTextContent());
-                    System.out.println("Marks : "
-                            + eElement
-                            .getElementsByTagName("marks")
-                            .item(0)
-                            .getTextContent());
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }*/
     }
 }
