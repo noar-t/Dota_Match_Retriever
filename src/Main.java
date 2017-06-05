@@ -36,7 +36,7 @@ public class Main {
 
             for (int temp = 0; temp < XMLmatches.getLength(); temp++) {
                 Node nNode = XMLmatches.item(temp);
-                System.out.println("\nElement " + temp + " :"
+                System.out.println("\nElement " + temp + " : "
                         + nNode.getNodeName());
 
                 if (nNode.getNodeType() == Node.ELEMENT_NODE) {
@@ -61,6 +61,8 @@ public class Main {
                                 .getElementsByTagName("hero_id")
                                 .item(0)
                                 .getTextContent());
+
+                        System.out.println("Player Slot : " + i);
                     }
 
                 }
