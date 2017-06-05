@@ -1,9 +1,9 @@
-import java.util.LinkedList;
 
 /**
  * Created by noah on 5/31/17.
  */
 public class Match {
+    boolean mValidMatch;
     long mMatchId;
     long[] mPlayerIds;
     int[] mPlayerHeros;
@@ -13,6 +13,7 @@ public class Match {
         mMatchId = MatchId;
         mPlayerIds = PlayerIds;
         mPlayerHeros = PlayerHeros;
+        mValidMatch = MatchId > 0; // catches 1v1s or any other not 5v5
     }
 
     public long getMatchId() {
@@ -27,8 +28,14 @@ public class Match {
         return mPlayerHeros;
     }
 
+    public boolean isValidMatch() {
+        return mValidMatch;
+    }
+
     public String toString() {
-        return "Match ID:       " + mMatchId + "\n" +
+        if (mValidMatch) // probably shouldnt be hardcoded like this but im lazy rn
+            return "Match ID:       " + mMatchId + "\n" +
+                "___________________________\n" +
                 "Account ID #1:  " + mPlayerIds[0] + "\n" +
                 "Hero ID:        " + mPlayerHeros[0] + "\n" +
                 "Account ID #2:  " + mPlayerIds[1] + "\n" +
@@ -49,7 +56,9 @@ public class Match {
                 "Hero ID:        " + mPlayerHeros[8] + "\n" +
                 "Account ID #10: " + mPlayerIds[9] + "\n" +
                 "Hero ID:        " + mPlayerHeros[9] + "\n" +
-                "______________________________\n";
+                "==========================\n";
+        else //
+            return "--Match is Invalid--\n";
 
     }
 }

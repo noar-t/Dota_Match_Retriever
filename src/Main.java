@@ -18,33 +18,24 @@ public class Main {
         int[] mPlayerHeros = new int[10];
         ArrayList<Match> mMatchArray = new ArrayList<>();
 
-        System.out.println("Hello World!");
-
-        //String apiKey = "";
-
         try {
             File apiKeyFile = new File("DevKey.txtkey");
             BufferedReader lineReader = new BufferedReader(new FileReader(apiKeyFile));
             String apiKey = lineReader.readLine(); // need to read from file
             String accountId = lineReader.readLine();
             String steamId3 = lineReader.readLine();
-            //System.out.println(apiKey +"\n" + accountId);
 
             DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
             Document web_XML = dBuilder.parse("https://api.steampowered.com/IDOTA2Match_570/GetMatchHistory/V001/?format=XML&account_id=" + accountId + "&key="+ apiKey);
             web_XML.getDocumentElement().normalize();
 
-            //System.out.println("Root element: "
-            //        + web_XML.getDocumentElement().getNodeName());
-
             NodeList XMLmatches = web_XML.getElementsByTagName("match");
 
             for (int temp = 0; temp < XMLmatches.getLength(); temp++) { // loop through each match in xml
                 Node nNode = XMLmatches.item(temp);
-                System.out.println("_______________________________");
-                System.out.println("Element " + temp + " : "
-                        + nNode.getNodeName());
+                System.out.println("==========================");
+                System.out.println("Element         " + temp);
 
                 if (nNode.getNodeType() == Node.ELEMENT_NODE) {
                     Element eElement = (Element) nNode;
@@ -55,12 +46,13 @@ public class Main {
                             .item(0)
                             .getTextContent());
 
-                    //System.out.println("Match ID : "
-                    //        + mMatchId);
-
                     NodeList XMLplayers = eElement.getElementsByTagName("player");
 
                     for (int i = 0; i < XMLplayers.getLength(); i++) { // loop through each player in each match
+                        if (XMLplayers.getLength() < 10) {
+                            mMatchId = -mMatchId;
+                            break;
+                        }
                         Element test = (Element) XMLplayers.item(i);
 
                         mPlayerIds[i] = Long.parseLong(test
@@ -68,16 +60,10 @@ public class Main {
                                 .item(0)
                                 .getTextContent());
 
-                        //System.out.println("Account ID " + i + ": " + mPlayerIds[i]);
-
                         mPlayerHeros[i] = Integer.parseInt(test
                                 .getElementsByTagName("hero_id")
                                 .item(0)
                                 .getTextContent());
-
-                        //System.out.println("Hero ID " + i + ": " + mPlayerHeros[i]);
-
-                        //System.out.println("Player Slot : " + i);
                     }
 
                     mMatchArray.add(new Match(mMatchId, mPlayerIds, mPlayerHeros));
