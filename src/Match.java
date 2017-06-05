@@ -5,12 +5,14 @@ import java.util.LinkedList;
  */
 public class Match {
     long mMatchId;
-    long[] mPlayerIds;// = new long[10];
+    long[] mPlayerIds;
+    int[] mPlayerHeros;
 
 
-    public Match(long MatchId, long[] PlayerId) {
+    public Match(long MatchId, long[] PlayerIds, int[] PlayerHeros) {
         mMatchId = MatchId;
-        mPlayerIds = PlayerId;
+        mPlayerIds = PlayerIds;
+        mPlayerHeros = PlayerHeros;
     }
 
     public long getMatchId() {
@@ -19,5 +21,9 @@ public class Match {
 
     public long[] getmPlayerIds() {
         return mPlayerIds;
+    }
+
+    public int[] getPlayerHeros() {
+        return mPlayerHeros;
     }
 }

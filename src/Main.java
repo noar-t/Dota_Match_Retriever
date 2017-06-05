@@ -42,11 +42,15 @@ public class Main {
                 if (nNode.getNodeType() == Node.ELEMENT_NODE) {
                     Element eElement = (Element) nNode;
 
-                    System.out.println("Match ID : "
-                            + eElement
+                    long matchId = Long.parseLong(
+                            eElement
                             .getElementsByTagName("match_id")
                             .item(0)
                             .getTextContent());
+
+                    System.out.println("Match ID : "
+                            + matchId);
+                    
                     NodeList XMLplayers = eElement.getElementsByTagName("player");
 
                     for (int i = 0; i < XMLplayers.getLength(); i++) {
