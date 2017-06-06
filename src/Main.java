@@ -17,7 +17,8 @@ public class Main {
     private static String mSteamId3;
 
     public static void main(String[] args) throws Exception  {
-        getMatchList();
+        getDevValues();
+        getMatchListXML();
 
     }
 
@@ -34,18 +35,18 @@ public class Main {
         }
     }
 
-    public static void getMatchList() throws Exception {
+    public static Document getMatchListXML() throws Exception {
         try {
             DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
             Document web_XML = dBuilder.parse("https://api.steampowered.com/IDOTA2Match_570/GetMatchHistory/V001/?format=XML&account_id=" + mAccountId + "&key=" + mApiKey);
             web_XML.getDocumentElement().normalize();
+            return web_XML;
         }
         catch (IOException e) {
             System.out.println("HTTP Request failed, check api key\n");
         }
-
-
+        return null;
     }
 
     public static ArrayList<Match> getMatchList2() throws Exception {
