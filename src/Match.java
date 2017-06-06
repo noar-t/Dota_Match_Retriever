@@ -39,7 +39,7 @@ public class Match {
     public String toString() {
         if (mValidMatch) // probably shouldnt be hardcoded like this but im lazy rn
             return "Match ID:       " + mMatchId + "\n" +
-                "___________________________\n" +
+                "__________________________\n" +
                 "Account ID #1:  " + mPlayerIds[0] + "\n" +
                 "Hero ID:        " + mPlayerHeros[0] + "\n" +
                 "Account ID #2:  " + mPlayerIds[1] + "\n" +
