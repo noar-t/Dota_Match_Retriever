@@ -19,12 +19,12 @@ public class Main {
     public static void main(String[] args) throws Exception  {
         getDevValues();
         Document XML = getMatchListXML("https://api.steampowered.com/IDOTA2Match_570/GetMatchHistory/V001/?format=XML&account_id=" + mAccountId + "&key=" + mApiKey);
-        ArrayList<Match> mMatches = null;
+        ArrayList<Long> mMatches = null;
         if (XML != null)
             mMatches = getMatchArrayList(XML);
 
         if (mMatches != null)
-            for (Match i : mMatches)
+            for (Long i : mMatches)
                 System.out.println(i);
 
     }
@@ -56,16 +56,13 @@ public class Main {
         return null;
     }
 
-    public static ArrayList<Match> getMatchArrayList(Document XML) /*throws Exception*/ {
+    public static ArrayList<Long> getMatchArrayList(Document XML) { // returns a list of the last 100 matches
         long MatchId;
-        ArrayList<Match> MatchArray = new ArrayList<>();
+        ArrayList<Long> MatchArray = new ArrayList<>();
 
         NodeList XMLmatches = XML.getElementsByTagName("match");
 
         for (int temp = 0; temp < XMLmatches.getLength(); temp++) { // loop through each match in xml
-            long[] mPlayerIds = new long[10];
-            int[] mPlayerHeros = new int[10];
-
             Node nNode = XMLmatches.item(temp);
 
             if (nNode.getNodeType() == Node.ELEMENT_NODE) {
@@ -78,25 +75,10 @@ public class Main {
 
                 NodeList XMLplayers = eElement.getElementsByTagName("player");
 
-                for (int i = 0; i < XMLplayers.getLength(); i++) { // loop through each player in each match
-                    if (XMLplayers.getLength() < 10) {
-                        MatchId = -MatchId;
-                        break;
-                    }
-                    Element test = (Element) XMLplayers.item(i);
-
-                    mPlayerIds[i] = Long.parseLong(test
-                            .getElementsByTagName("account_id")
-                            .item(0)
-                            .getTextContent());
-
-                    mPlayerHeros[i] = Integer.parseInt(test
-                            .getElementsByTagName("hero_id")
-                            .item(0)
-                            .getTextContent());
-                }
-
-                MatchArray.add(new Match(MatchId, mPlayerIds, mPlayerHeros));
+                if (XMLplayers.getLength() == 10)
+                    MatchArray.add(MatchId);
+                else
+                    MatchArray.add(-MatchId);
             }
         }
         return MatchArray;
@@ -104,7 +86,7 @@ public class Main {
 
     }
 
-    /*public int getMatchDetails (long matchId) throws Exception{
+    public ArrayList<Match> getMatchDetails (Long matchId) throws Exception{
 
         try {
             DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
@@ -163,6 +145,6 @@ public class Main {
             System.out.println("HTTP Request failed, check api key\n");
         }
 
-
-    }*/
+        return null;
+    }
 }
