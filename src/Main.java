@@ -23,9 +23,12 @@ public class Main {
         if (XML != null)
             mMatches = getMatchArrayList(XML);
 
-        if (mMatches != null)
-            for (Long i : mMatches)
-                System.out.println(i);
+        //if (mMatches != null)
+        //    for (Long i : mMatches)
+        //        System.out.println(i);
+
+        //long i = 3225550484L;
+        ArrayList<Match> Matches = getMatchDetails(3225550484L);
 
     }
 
@@ -86,7 +89,7 @@ public class Main {
 
     }
 
-    public ArrayList<Match> getMatchDetails (Long matchId) throws Exception {
+    public static ArrayList<Match> getMatchDetails (Long matchId) throws Exception {
         ArrayList<Match> MatchArray = new ArrayList<>();
 
 
@@ -95,15 +98,19 @@ public class Main {
 
         NodeList XML_Players = XML.getElementsByTagName("player");
 
+
+        System.out.println("length: "
+                + XML_Players.getLength());
+
         for (int temp = 0; temp < XML_Players.getLength(); temp++) { // loop through each match in xml
             long[] PlayerIds = new long[10];
-            int[] PlayerHeros = new int[10]
+            int[] PlayerHeros = new int[10];
 
             Node nNode = XML_Players.item(temp);
             System.out.println("==========================");
             System.out.println("Element         " + temp);
 
-            if (nNode.getNodeType() == Node.ELEMENT_NODE) {
+            /*if (nNode.getNodeType() == Node.ELEMENT_NODE) {
                 Element eElement = (Element) nNode;
 
                 matchId = Long.parseLong(eElement
@@ -132,9 +139,9 @@ public class Main {
                 }
 
                 MatchArray.add(new Match(matchId, PlayerIds, PlayerHeros));
-                System.out.println(MatchArray.get(temp));
+                System.out.println(MatchArray.get(temp));*/
             }
-        }
+
 
         return null;
     }
