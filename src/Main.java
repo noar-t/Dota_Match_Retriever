@@ -18,13 +18,13 @@ public class Main {
 
     public static void main(String[] args) throws Exception  {
         getDevValues();
-        Document XML = getMatchListXML();
-        ArrayList<Match> Matches = null;
+        Document XML = getMatchListXML("https://api.steampowered.com/IDOTA2Match_570/GetMatchHistory/V001/?format=XML&account_id=" + mAccountId + "&key=" + mApiKey);
+        ArrayList<Match> mMatches = null;
         if (XML != null)
-            Matches = getMatchArrayList(XML);
+            mMatches = getMatchArrayList(XML);
 
-        if (Matches != null)
-            for (Match i : Matches)
+        if (mMatches != null)
+            for (Match i : mMatches)
                 System.out.println(i);
 
     }
@@ -42,11 +42,11 @@ public class Main {
         }
     }
 
-    public static Document getMatchListXML() throws Exception {
+    public static Document getMatchListXML(String request) throws Exception {
         try {
             DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
-            Document web_XML = dBuilder.parse("https://api.steampowered.com/IDOTA2Match_570/GetMatchHistory/V001/?format=XML&account_id=" + mAccountId + "&key=" + mApiKey);
+            Document web_XML = dBuilder.parse(request);
             web_XML.getDocumentElement().normalize();
             return web_XML;
         }
@@ -57,8 +57,8 @@ public class Main {
     }
 
     public static ArrayList<Match> getMatchArrayList(Document XML) /*throws Exception*/ {
-        long mMatchId;
-        ArrayList<Match> mMatchArray = new ArrayList<>();
+        long MatchId;
+        ArrayList<Match> MatchArray = new ArrayList<>();
 
         NodeList XMLmatches = XML.getElementsByTagName("match");
 
@@ -71,7 +71,7 @@ public class Main {
             if (nNode.getNodeType() == Node.ELEMENT_NODE) {
                 Element eElement = (Element) nNode;
 
-                mMatchId = Long.parseLong(eElement
+                MatchId = Long.parseLong(eElement
                                 .getElementsByTagName("match_id")
                                 .item(0)
                                 .getTextContent());
@@ -80,7 +80,7 @@ public class Main {
 
                 for (int i = 0; i < XMLplayers.getLength(); i++) { // loop through each player in each match
                     if (XMLplayers.getLength() < 10) {
-                        mMatchId = -mMatchId;
+                        MatchId = -MatchId;
                         break;
                     }
                     Element test = (Element) XMLplayers.item(i);
@@ -96,10 +96,10 @@ public class Main {
                             .getTextContent());
                 }
 
-                mMatchArray.add(new Match(mMatchId, mPlayerIds, mPlayerHeros));
+                MatchArray.add(new Match(MatchId, mPlayerIds, mPlayerHeros));
             }
         }
-        return mMatchArray;
+        return MatchArray;
 
 
     }

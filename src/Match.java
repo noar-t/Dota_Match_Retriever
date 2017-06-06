@@ -15,9 +15,9 @@ public class Match {
         mPlayerHeros = PlayerHeros;
         mValidMatch = MatchId > 0; // catches 1v1s or any other not 5v5
 
-        if (mValidMatch) {
+        //if (mValidMatch) {
 
-        }
+        //}
     }
 
     public long getMatchId() {
