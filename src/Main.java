@@ -15,10 +15,13 @@ public class Main {
     private static String mApiKey;
     private static String mAccountId;
     private static String mSteamId3;
+    //private static Document XML;
 
     public static void main(String[] args) throws Exception  {
         getDevValues();
-        getMatchListXML();
+        Document XML = getMatchListXML();
+        if (XML != null)
+            getMatchArrayList(XML);
 
     }
 
@@ -49,19 +52,15 @@ public class Main {
         return null;
     }
 
-    public static ArrayList<Match> getMatchList2() throws Exception {
+    public static ArrayList<Match> getMatchArrayList(Document XML) throws Exception {
         long mMatchId;
         long[] mPlayerIds = new long[10];
         int[] mPlayerHeros = new int[10];
         ArrayList<Match> mMatchArray = new ArrayList<>();
 
         try {
-            DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
-            DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
-            Document web_XML = dBuilder.parse("https://api.steampowered.com/IDOTA2Match_570/GetMatchHistory/V001/?format=XML&account_id=" + mAccountId + "&key="+ mApiKey);
-            web_XML.getDocumentElement().normalize();
-
-            NodeList XMLmatches = web_XML.getElementsByTagName("match");
+            
+            NodeList XMLmatches = XML.getElementsByTagName("match");
 
             for (int temp = 0; temp < XMLmatches.getLength(); temp++) { // loop through each match in xml
                 Node nNode = XMLmatches.item(temp);
@@ -105,11 +104,12 @@ public class Main {
         catch (ParserException e ) {
             System.out.println("Error in XML\n");
         }
+        return null;
 
 
     }
 
-    public int getMatchDetails (long matchId) throws Exception{
+    /*public int getMatchDetails (long matchId) throws Exception{
 
         try {
             DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
@@ -169,5 +169,5 @@ public class Main {
         }
 
 
-    }
+    }*/
 }
