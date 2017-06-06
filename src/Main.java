@@ -86,63 +86,54 @@ public class Main {
 
     }
 
-    public ArrayList<Match> getMatchDetails (Long matchId) throws Exception{
+    public ArrayList<Match> getMatchDetails (Long matchId) throws Exception {
+        ArrayList<Match> MatchArray = new ArrayList<>();
 
-        try {
-            DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
-            DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
-            Document web_XML = dBuilder.parse("https://api.steampowered.com/IDOTA2Match_570/GetMatchDetails/V001/?format=XML&match_id=" + matchId + "&key="+ apiKey);
-            web_XML.getDocumentElement().normalize();
 
-            NodeList XMLmatches = web_XML.getElementsByTagName("match");
+        Document XML = getMatchListXML("https://api.steampowered.com/IDOTA2Match_570/GetMatchDetails/V001/?format=XML&match_id=" + matchId + "&key="+ mApiKey);
 
-            for (int temp = 0; temp < XMLmatches.getLength(); temp++) { // loop through each match in xml
-                Node nNode = XMLmatches.item(temp);
-                System.out.println("==========================");
-                System.out.println("Element         " + temp);
 
-                if (nNode.getNodeType() == Node.ELEMENT_NODE) {
-                    Element eElement = (Element) nNode;
+        NodeList XML_Players = XML.getElementsByTagName("player");
 
-                    mMatchId = Long.parseLong(
-                            eElement
-                                    .getElementsByTagName("match_id")
-                                    .item(0)
-                                    .getTextContent());
+        for (int temp = 0; temp < XML_Players.getLength(); temp++) { // loop through each match in xml
+            long[] PlayerIds = new long[10];
+            int[] PlayerHeros = new int[10]
 
-                    NodeList XMLplayers = eElement.getElementsByTagName("player");
+            Node nNode = XML_Players.item(temp);
+            System.out.println("==========================");
+            System.out.println("Element         " + temp);
 
-                    for (int i = 0; i < XMLplayers.getLength(); i++) { // loop through each player in each match
-                        if (XMLplayers.getLength() < 10) {
-                            mMatchId = -mMatchId;
-                            break;
-                        }
-                        Element test = (Element) XMLplayers.item(i);
+            if (nNode.getNodeType() == Node.ELEMENT_NODE) {
+                Element eElement = (Element) nNode;
 
-                        mPlayerIds[i] = Long.parseLong(test
-                                .getElementsByTagName("account_id")
-                                .item(0)
-                                .getTextContent());
+                matchId = Long.parseLong(eElement
+                        .getElementsByTagName("match_id")
+                        .item(0)
+                        .getTextContent());
 
-                        mPlayerHeros[i] = Integer.parseInt(test
-                                .getElementsByTagName("hero_id")
-                                .item(0)
-                                .getTextContent());
+                NodeList XMLplayers = eElement.getElementsByTagName("player");
+
+                for (int i = 0; i < XMLplayers.getLength(); i++) { // loop through each player in each match
+                    if (XMLplayers.getLength() < 10) {
+                        matchId = -matchId;
+                        break;
                     }
+                    Element test = (Element) XMLplayers.item(i);
 
-                    mMatchArray.add(new Match(mMatchId, mPlayerIds, mPlayerHeros));
-                    System.out.println(mMatchArray.get(temp));
+                    PlayerIds[i] = Long.parseLong(test
+                            .getElementsByTagName("account_id")
+                            .item(0)
+                            .getTextContent());
+
+                    PlayerHeros[i] = Integer.parseInt(test
+                            .getElementsByTagName("hero_id")
+                            .item(0)
+                            .getTextContent());
                 }
+
+                MatchArray.add(new Match(matchId, PlayerIds, PlayerHeros));
+                System.out.println(MatchArray.get(temp));
             }
-        }
-        catch (FileNotFoundException e) {
-            System.out.println("File not present or file in wrong directory\n");
-        }
-        catch (ParserException e ) {
-            System.out.println("Error in XML\n");
-        }
-        catch (IOException e) {
-            System.out.println("HTTP Request failed, check api key\n");
         }
 
         return null;
