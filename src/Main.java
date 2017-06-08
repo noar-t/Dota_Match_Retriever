@@ -106,6 +106,15 @@ public class Main {
             long[] PlayerIds = new long[10];
             int[] PlayerHeros = new int[10];
 
+
+            Element test = (Element) XML_Players.item(temp);
+            PlayerIds[temp] = Long.parseLong(test
+                    .getElementsByTagName("account_id")
+                    .item(0)
+                    .getTextContent());
+
+            System.out.println("account_id : " + PlayerIds[temp]);
+
             Node nNode = XML_Players.item(temp);
             System.out.println("==========================");
             System.out.println("Element         " + temp);
