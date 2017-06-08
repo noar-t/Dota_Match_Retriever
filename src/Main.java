@@ -32,7 +32,7 @@ public class Main {
         //        System.out.println(i);
 
         //long i = 3225550484L;
-        Match Matches = getMatchDetails(3225550484L);
+        Match Matches = getMatchDetails(3231323466L);
 
     }
 
@@ -109,6 +109,21 @@ public class Main {
                 .item(0)
                 .getTextContent());
 
+        System.out.println(XML
+                .getElementsByTagName("radiant_score")
+                .item(0)
+                .getTextContent());
+
+        System.out.println(XML
+                .getElementsByTagName("dire_score")
+                .item(0)
+                .getTextContent());
+
+        System.out.println(XML
+                .getElementsByTagName("duration")
+                .item(0)
+                .getTextContent());
+
 
         NodeList XML_Players = XML.getElementsByTagName("player");
 
@@ -118,19 +133,27 @@ public class Main {
 
         for (int temp = 0; temp < XML_Players.getLength(); temp++) { // loop through each match in xml
 
+            Element playerElement = (Element) XML_Players.item(temp);
 
-            Element test = (Element) XML_Players.item(temp);
-            PlayerIds[temp] = Long.parseLong(test
+            PlayerIds[temp] = Long.parseLong(playerElement
                     .getElementsByTagName("account_id")
                     .item(0)
                     .getTextContent());
 
             System.out.println("account_id " + temp + " : " + PlayerIds[temp]);
 
-            PlayerHeros[temp] = Integer.parseInt(test
+            PlayerHeros[temp] = Integer.parseInt(playerElement
                     .getElementsByTagName("hero_id")
                     .item(0)
                     .getTextContent());
+            for (int item_num = 0; item_num < 6; item_num++) {
+
+                System.out.println(playerElement
+                        .getElementsByTagName("item_" + item_num)
+                        .item(0)
+                        .getTextContent());
+
+            }
 
             System.out.println("hero_id " + temp + "    : " + PlayerHeros[temp]);
         }
