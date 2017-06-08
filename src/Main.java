@@ -28,7 +28,7 @@ public class Main {
         //        System.out.println(i);
 
         //long i = 3225550484L;
-        ArrayList<Match> Matches = getMatchDetails(3225550484L);
+        Match Matches = getMatchDetails(3225550484L);
 
     }
 
@@ -89,15 +89,21 @@ public class Main {
 
     }
 
-    public static ArrayList<Match> getMatchDetails (Long matchId) throws Exception {
+    public static Match getMatchDetails (Long matchId) throws Exception {
         ArrayList<Match> MatchArray = new ArrayList<>();
 
 
         Document XML = getMatchListXML("https://api.steampowered.com/IDOTA2Match_570/GetMatchDetails/V001/?format=XML&match_id=" + matchId + "&key="+ mApiKey);
 
 
-        NodeList XML_Players = XML.getElementsByTagName("player");
 
+        System.out.println(XML
+                .getElementsByTagName("radiant_win")
+                .item(0)
+                .getTextContent());
+
+
+        NodeList XML_Players = XML.getElementsByTagName("player");
 
         System.out.println("length: "
                 + XML_Players.getLength());
