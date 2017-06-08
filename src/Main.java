@@ -1,4 +1,6 @@
 import jdk.nashorn.internal.runtime.ParserException;
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.Nullable;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -49,6 +51,7 @@ public class Main {
         }
     }
 
+    @Nullable
     public static Document getMatchListXML(String request) throws Exception {
         try {
             DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
@@ -63,7 +66,11 @@ public class Main {
         return null;
     }
 
+    @Contract("null -> null")
     public static ArrayList<Long> getMatchArrayList(Document XML) { // returns a list of the last 100 matches
+
+        if (XML == null)
+            return null;
 
         long MatchId;
         ArrayList<Long> MatchArray = new ArrayList<>();
@@ -76,7 +83,8 @@ public class Main {
             if (nNode.getNodeType() == Node.ELEMENT_NODE) {
                 Element eElement = (Element) nNode;
 
-                MatchId = Long.parseLong(eElement
+                MatchId = Long
+                        .parseLong(eElement
                                 .getElementsByTagName("match_id")
                                 .item(0)
                                 .getTextContent());
@@ -94,6 +102,7 @@ public class Main {
 
     }
 
+    @Nullable
     public static Match getMatchDetails (Long matchId) throws Exception {
 
         if (matchId <= 0)
@@ -104,20 +113,23 @@ public class Main {
                 + "&key="
                 + mApiKey);
 
-        System.out.println(XML
-                .getElementsByTagName("radiant_win")
-                .item(0)
-                .getTextContent());
+        System.out.println(Boolean
+                .parseBoolean(XML
+                    .getElementsByTagName("radiant_win")
+                    .item(0)
+                    .getTextContent()));
 
-        System.out.println(XML
-                .getElementsByTagName("radiant_score")
-                .item(0)
-                .getTextContent());
+        System.out.println(Integer
+                .parseInt(XML
+                    .getElementsByTagName("radiant_score")
+                    .item(0)
+                    .getTextContent()));
 
-        System.out.println(XML
-                .getElementsByTagName("dire_score")
-                .item(0)
-                .getTextContent());
+        System.out.println(Integer
+                .parseInt(XML
+                    .getElementsByTagName("dire_score")
+                    .item(0)
+                    .getTextContent()));
 
         System.out.println(XML
                 .getElementsByTagName("duration")
@@ -135,23 +147,37 @@ public class Main {
 
             Element playerElement = (Element) XML_Players.item(temp);
 
-            PlayerIds[temp] = Long.parseLong(playerElement
-                    .getElementsByTagName("account_id")
-                    .item(0)
-                    .getTextContent());
+            PlayerIds[temp] = Long
+                    .parseLong(playerElement
+                        .getElementsByTagName("account_id")
+                        .item(0)
+                        .getTextContent());
 
             System.out.println("account_id " + temp + " : " + PlayerIds[temp]);
 
-            PlayerHeros[temp] = Integer.parseInt(playerElement
-                    .getElementsByTagName("hero_id")
-                    .item(0)
-                    .getTextContent());
-            for (int item_num = 0; item_num < 6; item_num++) {
-
-                System.out.println(playerElement
-                        .getElementsByTagName("item_" + item_num)
+            PlayerHeros[temp] = Integer
+                    .parseInt(playerElement
+                        .getElementsByTagName("hero_id")
                         .item(0)
                         .getTextContent());
+
+            for (int item_num = 0; item_num < 6; item_num++) {
+
+                System.out.println(Integer
+                        .parseInt(playerElement
+                            .getElementsByTagName("item_" + item_num)
+                            .item(0)
+                            .getTextContent()));
+
+            }
+
+            for (int backpack_num = 0; backpack_num < 6; backpack_num++) {
+
+                System.out.println(Integer
+                        .parseInt(playerElement
+                            .getElementsByTagName("backpack_" + backpack_num)
+                            .item(0)
+                            .getTextContent()));
 
             }
 

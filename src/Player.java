@@ -2,7 +2,10 @@
  * Created by noah on 6/7/17.
  */
 public class Player {
+    boolean mRadiantWinner;
     int mAccountId;
+    int mDireScore;
+    int mRadiantScore;
     int[] mItemSlots;
     int[] mBackPackSlots;
     int[] mLevelApiblity; // needs to be constructed if i implement this
