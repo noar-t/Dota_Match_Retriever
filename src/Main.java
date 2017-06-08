@@ -73,7 +73,7 @@ public class Main {
             return null;
 
         long MatchId;
-        ArrayList<Long> MatchArray = new ArrayList<>();
+        ArrayList<Long> matchArray = new ArrayList<>();
 
         NodeList XMLmatches = XML.getElementsByTagName("match");
 
@@ -92,13 +92,13 @@ public class Main {
                 NodeList XMLplayers = eElement.getElementsByTagName("player");
 
                 if (XMLplayers.getLength() == 10)
-                    MatchArray.add(MatchId);
+                    matchArray.add(MatchId);
                 else
-                    MatchArray.add(-MatchId);
+                    matchArray.add(-MatchId);
             }
         }
 
-        return MatchArray;
+        return matchArray;
 
     }
 
@@ -140,50 +140,68 @@ public class Main {
         NodeList XML_Players = XML.getElementsByTagName("player");
 
 
-        long[] PlayerIds = new long[10];
-        int[] PlayerHeros = new int[10];
+        long[] playerIds = new long[10];
+        int[] playerHeros = new int[10];
+
+        long playerId;
+        int playerHeroId;
+
+
+        ArrayList<Player> matchPlayers = new ArrayList<>();
 
         for (int temp = 0; temp < XML_Players.getLength(); temp++) { // loop through each match in xml
 
             Element playerElement = (Element) XML_Players.item(temp);
 
-            PlayerIds[temp] = Long
+            playerId = Long
                     .parseLong(playerElement
                         .getElementsByTagName("account_id")
                         .item(0)
                         .getTextContent());
+            playerIds[temp] = playerId;
+            System.out.println("account_id " + temp + " : " + playerIds[temp]);
 
-            System.out.println("account_id " + temp + " : " + PlayerIds[temp]);
-
-            PlayerHeros[temp] = Integer
+            playerHeroId = Integer
                     .parseInt(playerElement
                         .getElementsByTagName("hero_id")
                         .item(0)
                         .getTextContent());
+            playerHeros[temp] = playerHeroId;
+            System.out.println("hero_id " + temp + "    : " + playerHeros[temp]);
+
+
+            int[] playerItems = new int[6];
 
             for (int item_num = 0; item_num < 6; item_num++) {
 
-                System.out.println(Integer
+                playerItems[item_num] = Integer
                         .parseInt(playerElement
                             .getElementsByTagName("item_" + item_num)
                             .item(0)
-                            .getTextContent()));
+                            .getTextContent());
+
+                System.out.println("item " + item_num+ " : " + playerItems[item_num]);
 
             }
 
-            for (int backpack_num = 0; backpack_num < 6; backpack_num++) {
+            int[] backpackPlayerItems = new int[3];
 
-                System.out.println(Integer
+            for (int backpack_num = 0; backpack_num < 3; backpack_num++) {
+
+                backpackPlayerItems[backpack_num] = Integer
                         .parseInt(playerElement
                             .getElementsByTagName("backpack_" + backpack_num)
                             .item(0)
-                            .getTextContent()));
+                            .getTextContent());
+
+                System.out.println("backpack item " + backpack_num + " : " + backpackPlayerItems[backpack_num]);
 
             }
 
-            System.out.println("hero_id " + temp + "    : " + PlayerHeros[temp]);
+
+
         }
 
-        return new Match(matchId, PlayerIds, PlayerHeros);
+        return new Match(matchId, playerIds, playerHeros);
     }
 }
