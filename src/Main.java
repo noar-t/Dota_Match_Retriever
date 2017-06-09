@@ -113,28 +113,28 @@ public class Main {
                 + "&key="
                 + mApiKey);
 
-        System.out.println(Boolean
+        boolean radiantWin = Boolean
                 .parseBoolean(XML
                     .getElementsByTagName("radiant_win")
                     .item(0)
-                    .getTextContent()));
+                    .getTextContent());
 
-        System.out.println(Integer
+        int radiantScore = Integer
                 .parseInt(XML
                     .getElementsByTagName("radiant_score")
                     .item(0)
-                    .getTextContent()));
+                    .getTextContent());
 
-        System.out.println(Integer
+        int direScore = Integer
                 .parseInt(XML
                     .getElementsByTagName("dire_score")
                     .item(0)
-                    .getTextContent()));
+                    .getTextContent());
 
-        System.out.println(XML
+        /*System.out.println(XML
                 .getElementsByTagName("duration")
                 .item(0)
-                .getTextContent());
+                .getTextContent());*/
 
 
         NodeList XML_Players = XML.getElementsByTagName("player");
@@ -180,10 +180,10 @@ public class Main {
                             .getTextContent());
             }
 
-            matchPlayers.add(new Player(accountId, playerHeroId, playerItems, backpackPlayerItems)); // TODO add more data such as items and hero
-            System.out.println(matchPlayers.get(temp));
+            matchPlayers.add(new Player(accountId, playerHeroId, playerItems, backpackPlayerItems));
+            //System.out.println(matchPlayers.get(temp));
         }
-
-        return null;
+        System.out.println(new Match(matchId, radiantWin, radiantScore, direScore, matchPlayers));
+        return new Match(matchId, radiantWin, radiantScore, direScore, matchPlayers);
     }
 }

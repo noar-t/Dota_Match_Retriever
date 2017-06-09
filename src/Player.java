@@ -2,7 +2,6 @@
  * Created by noah on 6/7/17.
  */
 public class Player {
-    boolean mRadiantWinner;
     long mAccountId;
     int mHeroId;
     int[] mItemSlots;
