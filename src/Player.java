@@ -3,21 +3,25 @@
  */
 public class Player {
     boolean mRadiantWinner;
-    int mAccountId;
-    int mDireScore;
-    int mRadiantScore;
+    long mAccountId;
+    int mHeroId;
     int[] mItemSlots;
     int[] mBackPackSlots;
-    int[] mLevelApiblity; // needs to be constructed if i implement this
+    //int[] mLevelApiblity; needs to be constructed if i implement this
 
-    public Player(int accountId/*, int[] itemSlots, int[] backPackSlots*/) {
+    public Player(long accountId, int heroId, int[] itemSlots, int[] backPackSlots) {
         mAccountId = accountId;
-       // mItemSlots = itemSlots;
-       // mBackPackSlots = backPackSlots;
+        mHeroId = heroId;
+        mItemSlots = itemSlots;
+        mBackPackSlots = backPackSlots;
     }
 
-    public int getAccountId() {
+    public long getAccountId() {
         return mAccountId;
+    }
+
+    public int getmHeroId() {
+        return mHeroId;
     }
 
     public int[] getItemSlots() {
@@ -26,5 +30,9 @@ public class Player {
 
     public int[] getBackPackSlots() {
         return mBackPackSlots;
+    }
+
+    public String toString(){
+        return ("AccountID : " + mAccountId + "\nHeroID : " + mHeroId + "\n");
     }
 }

@@ -6,6 +6,8 @@ public class Match {
     boolean mValidMatch;
     long mMatchId;
     long[] mPlayerIds;
+    int mDireScore;
+    int mRadiantScore;
     int[] mPlayerHeros;
 
 
