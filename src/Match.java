@@ -38,6 +38,16 @@ public class Match {
         return mValidMatch;
     }
 
+    public boolean isWinner(long accountId) {
+        int x = 0;
+        for (Player i : mPlayers) {
+            if (i.getAccountId() == accountId && x < 5)
+                return true;
+            x++;
+        }
+        return false;
+    }
+
     public String toString() {
         String output;
         output = "Match Id: " + mMatchId + "\n";
