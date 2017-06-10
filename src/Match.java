@@ -43,6 +43,14 @@ public class Match {
         output = "Match Id: " + mMatchId + "\n";
         output = output + "===================\n";
         output = output + "Dire Score : " + mDireScore + " vs Radiant Score : " + mRadiantScore + "\n";
+        output = output + "RadiantWinner : " + mRadiantWin + "\n";
+        output = output + "\n===================\n" + "Radiant Team\n" + "===================\n";
+        for (int i = 0; i <  5; i++)
+            output = output + mPlayers.get(i);
+
+        output = output + "\n===================\n" + "Dire Team\n" + "===================\n";
+        for (int i = 5; i <  10; i++)
+            output = output + mPlayers.get(i);
 
         return output;
     }

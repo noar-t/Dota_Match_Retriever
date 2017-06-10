@@ -20,14 +20,14 @@ public class Main {
 
     public static void main(String[] args) throws Exception  {
         getDevValues();
-        Document XML = getMatchListXML("https://api.steampowered.com/IDOTA2Match_570/GetMatchHistory/V001/?format=XML&account_id="
+        /*Document XML = getMatchListXML("https://api.steampowered.com/IDOTA2Match_570/GetMatchHistory/V001/?format=XML&account_id="
                 + mAccountId
                 + "&key="
                 + mApiKey);
 
         ArrayList<Long> mMatches = null;
         if (XML != null)
-            mMatches = getMatchArrayList(XML);
+            mMatches = getMatchArrayList(XML);*/
 
         //if (mMatches != null)
         //    for (Long i : mMatches)

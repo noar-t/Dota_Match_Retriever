@@ -32,6 +32,19 @@ public class Player {
     }
 
     public String toString(){
-        return ("AccountID : " + mAccountId + "\nHeroID : " + mHeroId + "\n");
+        String output;
+       // output = "--------------------\n";
+        output = "AccountID   : " + mAccountId + "\n";
+        output = output + "HeroID      : " + mHeroId + "\n";
+
+        for (int i = 0; i < 6; i++) {
+            output = output + "Item Slot " + i + " : " + mItemSlots[i] + "\n";
+        }
+        for (int i = 0; i < 3; i++) {
+            output = output + "Backpack Slot " + i + " : " + mBackPackSlots[i] + "\n";
+        }
+        output = output + "--------------------\n";
+
+        return output;
     }
 }
