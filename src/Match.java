@@ -41,8 +41,9 @@ public class Match {
     public boolean isWinner(long accountId) {
         int x = 0;
         for (Player i : mPlayers) {
-            if (i.getAccountId() == accountId && x < 5)
+            if (i.getAccountId() == accountId && x < 5 && mRadiantWin)
                 return true;
+            else if (i.getAccountId() == accountId && x >= 5 && !mRadiantWin)
             x++;
         }
         return false;
