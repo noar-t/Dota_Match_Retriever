@@ -26,13 +26,9 @@ public class Match {
         return mMatchId;
     }
 
-    /*public long[] getPlayerIds() {
-        return mPlayerIds;
+    public ArrayList<Player> getPlayers() {
+        return mPlayers;
     }
-
-    public int[] getPlayerHeros() {
-        return mPlayerHeros;
-    }*/
 
     public boolean isValidMatch() {
         return mValidMatch;
