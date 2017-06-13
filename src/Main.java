@@ -131,12 +131,12 @@ public class Main {
                     .item(0)
                     .getTextContent());
 
+        // not sure best way to convert seconds to min:sec
         /*System.out.println(XML
                 .getElementsByTagName("duration")
                 .item(0)
                 .getTextContent());*/
-
-
+        
         NodeList XML_Players = XML.getElementsByTagName("player");
 
         long accountId;
@@ -161,7 +161,6 @@ public class Main {
 
 
             int[] playerItems = new int[6];
-
             for (int item_num = 0; item_num < 6; item_num++) {
                 playerItems[item_num] = Integer
                         .parseInt(playerElement
@@ -171,7 +170,6 @@ public class Main {
             }
 
             int[] backpackPlayerItems = new int[3];
-
             for (int backpack_num = 0; backpack_num < 3; backpack_num++) {
                 backpackPlayerItems[backpack_num] = Integer
                         .parseInt(playerElement
@@ -179,9 +177,7 @@ public class Main {
                             .item(0)
                             .getTextContent());
             }
-
             matchPlayers.add(new Player(accountId, playerHeroId, playerItems, backpackPlayerItems));
-            //System.out.println(matchPlayers.get(temp));
         }
         System.out.println(new Match(matchId, radiantWin, radiantScore, direScore, matchPlayers));
         return new Match(matchId, radiantWin, radiantScore, direScore, matchPlayers);
