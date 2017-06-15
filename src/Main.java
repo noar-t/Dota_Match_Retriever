@@ -33,7 +33,6 @@ public class Main {
         //    for (Long i : mMatches)
         //        System.out.println(i);
 
-        //long i = 3225550484L;
         Match Matches = getMatchDetails(3231323466L);
 
     }
@@ -136,7 +135,7 @@ public class Main {
                 .getElementsByTagName("duration")
                 .item(0)
                 .getTextContent());*/
-        
+
         NodeList XML_Players = XML.getElementsByTagName("player");
 
         long accountId;
@@ -181,5 +180,9 @@ public class Main {
         }
         System.out.println(new Match(matchId, radiantWin, radiantScore, direScore, matchPlayers));
         return new Match(matchId, radiantWin, radiantScore, direScore, matchPlayers);
+    }
+
+    public static calcWinRate(ArrayList<Match>, String mAccountId) {
+        
     }
 }
