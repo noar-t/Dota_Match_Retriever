@@ -182,7 +182,16 @@ public class Main {
         return new Match(matchId, radiantWin, radiantScore, direScore, matchPlayers);
     }
 
-    public static calcWinRate(ArrayList<Match>, String mAccountId) {
-        
+    public static double calcWinRate(ArrayList<Match> Matches, long AccountId) {
+        int wins = 0;
+        int total = 0;
+
+        for (Match i: Matches) {
+            if (i.isWinner(AccountId))
+                wins++;
+            total++;
+        }
+
+        return wins / (double) total;
     }
 }
