@@ -20,20 +20,26 @@ public class Main {
 
     public static void main(String[] args) throws Exception  {
         getDevValues();
-        /*Document XML = getMatchListXML("https://api.steampowered.com/IDOTA2Match_570/GetMatchHistory/V001/?format=XML&account_id="
+        Document XML = getMatchListXML("https://api.steampowered.com/IDOTA2Match_570/GetMatchHistory/V001/?format=XML&account_id="
                 + mAccountId
                 + "&key="
                 + mApiKey);
 
         ArrayList<Long> mMatches = null;
         if (XML != null)
-            mMatches = getMatchArrayList(XML);*/
+            mMatches = getMatchArrayList(XML); // returns long array of match id
 
-        //if (mMatches != null)
-        //    for (Long i : mMatches)
-        //        System.out.println(i);
+        int testint = 0;
+        ArrayList<Match> matchObjects = new ArrayList<>();
+        if (mMatches != null)
+            for (Long i : mMatches) {
+                Thread.sleep(250);
+                matchObjects.add(getMatchDetails(i));
+                System.out.println(matchObjects.get(testint));
+                testint++;
+            }
 
-        Match Matches = getMatchDetails(3231323466L);
+       // Match Matches = getMatchDetails(3231323466L);
 
     }
 
@@ -187,9 +193,11 @@ public class Main {
         int total = 0;
 
         for (Match i: Matches) {
-            if (i.isWinner(AccountId))
-                wins++;
-            total++;
+            if (i != null)
+                if (i.isWinner(AccountId))
+                    wins++;
+                else
+                    total++;
         }
 
         return wins / (double) total;
