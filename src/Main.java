@@ -35,7 +35,7 @@ public class Main {
             for (Long i : mMatches) {
                 Thread.sleep(250);
                 matchObjects.add(getMatchDetails(i));
-                System.out.println(matchObjects.get(testint));
+                System.out.println(matchObjects.get(testint) != null ? matchObjects.get(testint) : "Bad Match");
                 testint++;
             }
 
