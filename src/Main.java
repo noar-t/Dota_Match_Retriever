@@ -14,9 +14,9 @@ import java.util.ArrayList;
 
 public class Main {
 
-    private static String mApiKey;
-    private static String mAccountId;
-    private static String mSteamId3;
+    private static String mApiKey;    // unique api key to make requests
+    private static String mAccountId; // id to make request
+    private static String mSteamId3;  // id to parse from match data
 
     public static void main(String[] args) throws Exception  {
         getDevValues();
@@ -26,18 +26,30 @@ public class Main {
                 + mApiKey);
 
         ArrayList<Long> mMatches = null;
-        if (XML != null)
-            mMatches = getMatchArrayList(XML); // returns long array of match id
+        mMatches = getMatchArrayList(XML); // returns long array of match id
+
 
         int testint = 0;
         ArrayList<Match> matchObjects = new ArrayList<>();
-        if (mMatches != null)
+        if (mMatches != null) {
             for (Long i : mMatches) {
-                Thread.sleep(250);
+                Thread.sleep(200);
                 matchObjects.add(getMatchDetails(i));
                 System.out.println(matchObjects.get(testint) != null ? matchObjects.get(testint) : "Bad Match");
                 testint++;
             }
+            for (int x = 0; x < 4; x++) {
+                XML = getMatchListXML("https://api.steampowered.com/IDOTA2Match_570/GetMatchHistory/V001/?format=XML&start_at_match_id="
+                        + mMatches.get(mMatches.size() + 1)
+                        + "&account_id="
+                        + mAccountId
+                        + "&key="
+                        + mApiKey);
+                mMatches = getMatchArrayList(XML);
+                mMatches.remove(0);
+                
+            }
+        }
 
     }
 
