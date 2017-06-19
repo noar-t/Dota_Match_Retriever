@@ -28,28 +28,42 @@ public class Main {
         ArrayList<Long> mMatches = null;
         mMatches = getMatchArrayList(XML); // returns long array of match id
 
-
-        int testint = 0;
+        int totalCount = 0;
+        int outputTestInt = 0;
         ArrayList<Match> matchObjects = new ArrayList<>();
         if (mMatches != null) {
             for (Long i : mMatches) {
-                Thread.sleep(200);
+                Thread.sleep(50);
                 matchObjects.add(getMatchDetails(i));
-                System.out.println(matchObjects.get(testint) != null ? matchObjects.get(testint) : "Bad Match");
-                testint++;
+                System.out.println(matchObjects.get(outputTestInt) != null
+                        ? matchObjects.get(outputTestInt)
+                        : "Bad Match");
+                outputTestInt++;
+                totalCount++;
             }
-            for (int x = 0; x < 4; x++) {
+            for (int x = 0; x < 5; x++) {
+                outputTestInt = 0;
                 XML = getMatchListXML("https://api.steampowered.com/IDOTA2Match_570/GetMatchHistory/V001/?format=XML&start_at_match_id="
-                        + mMatches.get(mMatches.size() + 1)
+                        + mMatches.get(mMatches.size() - 1)
                         + "&account_id="
                         + mAccountId
                         + "&key="
                         + mApiKey);
                 mMatches = getMatchArrayList(XML);
                 mMatches.remove(0);
-                
+
+                for (Long i : mMatches) {
+                    Thread.sleep(50);
+                    matchObjects.add(getMatchDetails(i));
+                    System.out.println(matchObjects.get(outputTestInt) != null
+                            ? matchObjects.get(outputTestInt)
+                            : "Bad Match");
+                    outputTestInt++;
+                    totalCount++;
+                }
             }
         }
+        System.out.println("END TOTAL = " + totalCount + "\nARRAY SIZE = " + matchObjects.size());
 
     }
 
