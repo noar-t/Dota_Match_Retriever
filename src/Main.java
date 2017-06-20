@@ -33,7 +33,7 @@ public class Main {
         ArrayList<Match> matchObjects = new ArrayList<>();
         if (mMatches != null) {
             for (Long i : mMatches) {
-                Thread.sleep(50);
+                Thread.sleep(100);
                 matchObjects.add(getMatchDetails(i));
                 System.out.println(matchObjects.get(outputTestInt) != null
                         ? matchObjects.get(outputTestInt)
@@ -49,21 +49,27 @@ public class Main {
                         + mAccountId
                         + "&key="
                         + mApiKey);
-                mMatches = getMatchArrayList(XML);
-                mMatches.remove(0);
+                //mMatches = getMatchArrayList(XML);
+                //mMatches.remove(0);
 
-                for (Long i : mMatches) {
-                    Thread.sleep(50);
+                /*for (Long i : mMatches) {
+                    Thread.sleep(100);
                     matchObjects.add(getMatchDetails(i));
                     System.out.println(matchObjects.get(outputTestInt) != null
                             ? matchObjects.get(outputTestInt)
                             : "Bad Match");
                     outputTestInt++;
                     totalCount++;
-                }
+                }*/
             }
         }
-        System.out.println("END TOTAL = " + totalCount + "\nARRAY SIZE = " + matchObjects.size());
+        System.out.println("END TOTAL = " + totalCount
+                + "\nARRAY SIZE = " + matchObjects.size());
+        System.out.println("Win Rate Test : " + calcWinRate(matchObjects, Long.parseLong(mAccountId)));
+
+       /* matchObjects.add(getMatchDetails(3256365647l));
+        matchObjects.add(getMatchDetails(3254280056l));
+        System.out.println("Win Rate Testing : " + calcWinRate(matchObjects, Long.parseLong(mSteamId3)));*/
 
     }
 
@@ -208,22 +214,28 @@ public class Main {
             }
             matchPlayers.add(new Player(accountId, playerHeroId, playerItems, backpackPlayerItems));
         }
-        System.out.println(new Match(matchId, radiantWin, radiantScore, direScore, matchPlayers));
+        //System.out.println(new Match(matchId, radiantWin, radiantScore, direScore, matchPlayers));
         return new Match(matchId, radiantWin, radiantScore, direScore, matchPlayers);
     }
 
     public static double calcWinRate(ArrayList<Match> Matches, long AccountId) {
-        int wins = 0;
-        int total = 0;
+        double wins = 0;
+        double total = 0;
 
         for (Match i: Matches) {
-            if (i != null)
-                if (i.isWinner(AccountId))
+            if (i != null) {
+                if (i.isWinner(AccountId)) {
+                    System.out.println("A win");
                     wins++;
-                else
                     total++;
+                }
+                else {
+                    System.out.println("A loss");
+                    total++;
+                }
+            }
         }
 
-        return wins / (double) total;
+        return wins / total;
     }
 }
