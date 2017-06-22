@@ -1,4 +1,3 @@
-import jdk.nashorn.internal.runtime.ParserException;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.Nullable;
 import org.w3c.dom.Document;
