@@ -5,6 +5,11 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+import java.sql.Connection;
+import java.sql.DatabaseMetaData;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -18,19 +23,22 @@ public class Main {
     private static String mSteamId3;  // id to parse from match data
 
     public static void main(String[] args) throws Exception  {
+        createNewDatabase("test.db");
+        //connect();
+
         getDevValues();
-        Document XML = getMatchListXML("https://api.steampowered.com/IDOTA2Match_570/GetMatchHistory/V001/?format=XML&account_id="
-                + mAccountId
-                + "&key="
-                + mApiKey);
+        //Document XML = getMatchListXML("https://api.steampowered.com/IDOTA2Match_570/GetMatchHistory/V001/?format=XML&account_id="
+        //        + mAccountId
+        //        + "&key="
+        //        + mApiKey);
 
         ArrayList<Long> mMatches = null;
-        mMatches = getMatchArrayList(XML); // returns long array of match id
+        //mMatches = getMatchArrayList(XML); // returns long array of match id
 
         int totalCount = 0;
         int outputTestInt = 0;
         ArrayList<Match> matchObjects = new ArrayList<>();
-        if (mMatches != null) {
+        /*if (mMatches != null) {
             for (Long i : mMatches) {
                 Thread.sleep(100);
                 matchObjects.add(getMatchDetails(i));
@@ -48,10 +56,10 @@ public class Main {
                         + mAccountId
                         + "&key="
                         + mApiKey);
-                //mMatches = getMatchArrayList(XML);
-                //mMatches.remove(0);
+                mMatches = getMatchArrayList(XML);
+                mMatches.remove(0);
 
-                /*for (Long i : mMatches) {
+                for (Long i : mMatches) {
                     Thread.sleep(100);
                     matchObjects.add(getMatchDetails(i));
                     System.out.println(matchObjects.get(outputTestInt) != null
@@ -59,18 +67,58 @@ public class Main {
                             : "Bad Match");
                     outputTestInt++;
                     totalCount++;
-                }*/
+                }
             }
-        }
-        System.out.println("END TOTAL = " + totalCount
-                + "\nARRAY SIZE = " + matchObjects.size());
-        System.out.println("Win Rate Test : " + calcWinRate(matchObjects, Long.parseLong(mAccountId)));
+        }*/
+        //System.out.println("END TOTAL = " + totalCount
+        //        + "\nARRAY SIZE = " + matchObjects.size());
+        //System.out.println("Win Rate Test : " + calcWinRate(matchObjects, Long.parseLong(mAccountId)));
 
        /* matchObjects.add(getMatchDetails(3256365647l));
         matchObjects.add(getMatchDetails(3254280056l));
         System.out.println("Win Rate Testing : " + calcWinRate(matchObjects, Long.parseLong(mSteamId3)));*/
 
     }
+
+    public static void createNewDatabase(String fileName) {
+
+
+        String url = "jdbc:sqlite:" + fileName;
+
+        try (Connection conn = DriverManager.getConnection(url)) {
+            if (conn != null) {
+                DatabaseMetaData meta = conn.getMetaData();
+                System.out.println("The driver name is " + meta.getDriverName());
+                System.out.println("A new database has been created and or an existing database has been connected.");
+            }
+
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+   /* public static void connect() {
+        Connection conn = null;
+        try {
+            // db parameters
+            String url = "jdbc:sqlite:test.db";
+            // create a connection to the database
+            conn = DriverManager.getConnection(url);
+
+            System.out.println("Connection to SQLite has been established.");
+
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        } finally {
+            try {
+                if (conn != null) {
+                    conn.close();
+                }
+            } catch (SQLException ex) {
+                System.out.println(ex.getMessage());
+            }
+        }
+    }*/
 
     public static void getDevValues() throws Exception {
         try {
