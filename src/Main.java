@@ -5,10 +5,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import java.sql.Connection;
-import java.sql.DatabaseMetaData;
-import java.sql.DriverManager;
-import java.sql.SQLException;
+import java.sql.*;
 
 
 import javax.xml.parsers.DocumentBuilder;
@@ -85,15 +82,34 @@ public class Main {
 
         String url = "jdbc:sqlite:" + fileName;
 
-        try (Connection conn = DriverManager.getConnection(url)) {
+        Connection conn = null;
+        try {
+            conn = DriverManager.getConnection(url);
             if (conn != null) {
                 DatabaseMetaData meta = conn.getMetaData();
                 System.out.println("The driver name is " + meta.getDriverName());
                 System.out.println("A new database has been created and or an existing database has been connected.");
+
+                String sql = "CREATE TABLE IF NOT EXISTS dotaMatches (\n"
+                        + "	matchId integer PRIMARY KEY,\n"
+                        + "	radiantWin integer,\n"
+                        + "	capacity real\n"
+                        + ");";
+
+                Statement stmt = conn.createStatement();
+                stmt.execute(sql);
             }
 
         } catch (SQLException e) {
             System.out.println(e.getMessage());
+        } finally {
+            try {
+                if (conn != null) {
+                conn.close();
+                }
+            } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+            }
         }
     }
 
