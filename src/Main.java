@@ -20,10 +20,9 @@ public class Main {
     private static String mSteamId3;  // id to parse from match data
 
     public static void main(String[] args) throws Exception  {
-        createNewDatabase("test.db");
-        //connect();
-
         getDevValues();
+        establishDatabase("test.db");
+
         //Document XML = getMatchListXML("https://api.steampowered.com/IDOTA2Match_570/GetMatchHistory/V001/?format=XML&account_id="
         //        + mAccountId
         //        + "&key="
@@ -77,7 +76,7 @@ public class Main {
 
     }
 
-    public static void createNewDatabase(String fileName) {
+    public static void establishDatabase(String fileName) {
 
 
         String url = "jdbc:sqlite:" + fileName;
@@ -90,13 +89,45 @@ public class Main {
                 System.out.println("The driver name is " + meta.getDriverName());
                 System.out.println("A new database has been created and or an existing database has been connected.");
 
-                String sql = "CREATE TABLE IF NOT EXISTS dotaMatches (\n"
-                        + "	matchId integer PRIMARY KEY,\n"
-                        + "	radiantWin integer,\n"
-                        + "	capacity real\n"
+                String sql = "CREATE TABLE IF NOT EXISTS matches (\n"
+                        + "	match_id INTEGER NOT NULL PRIMARY KEY,\n"
+                        + "	radiant_win INTEGER NOT NULL,\n"
+                        + "	radiant_score INTEGER NOT NULL,\n"
+                        + "	dire_score INTEGER NOT NULL,\n"
+                        + "	duration INTEGER\n"
                         + ");";
 
                 Statement stmt = conn.createStatement();
+                stmt.execute(sql);
+
+                sql = "CREATE TABLE IF NOT EXISTS match_player_info (\n"
+                        + "	player INTEGER NOT NULL,\n"
+                        + "	matchId INTEGER NOT NULL\n"
+                        + ");";
+                stmt.execute(sql);
+
+                sql = "CREATE TABLE IF NOT EXISTS playersData (\n"
+                        + "	playerId integer NOT NULL,\n"
+                        + "	matchId integer NOT NULL,\n" // foreign key? refe rences dotaMatches matchId
+                        + "	heroId integer NOT NULL,\n"
+                        + "	itemSlot0 INTEGER,\n"
+                        + "	itemSlot1 integer,\n"
+                        + "	itemSlot2 integer,\n"
+                        + "	itemSlot3 integer,\n"
+                        + "	itemSlot4 integer,\n"
+                        + "	itemSlot5 integer\n"
+                        + "	backSlot0 integer,\n"
+                        + "	backSlot1 integer,\n"
+                        + "	backSlot2 integer\n"
+                        + ");";
+                stmt.execute(sql);
+
+                sql = "CREATE TABLE IF NOT EXISTS players (\n"
+                        + "	player_name TEXT,\n"
+                        + "	player_id INTEGER NOT NULL,"
+                        + "	id INTEGER NOT NULL, \n"
+                        + "     FOREIGN KEY (id) REFERENCES matches(match_id)\n"
+                        + ");";
                 stmt.execute(sql);
             }
 
@@ -112,29 +143,6 @@ public class Main {
             }
         }
     }
-
-   /* public static void connect() {
-        Connection conn = null;
-        try {
-            // db parameters
-            String url = "jdbc:sqlite:test.db";
-            // create a connection to the database
-            conn = DriverManager.getConnection(url);
-
-            System.out.println("Connection to SQLite has been established.");
-
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
-        } finally {
-            try {
-                if (conn != null) {
-                    conn.close();
-                }
-            } catch (SQLException ex) {
-                System.out.println(ex.getMessage());
-            }
-        }
-    }*/
 
     public static void getDevValues() throws Exception {
         try {
