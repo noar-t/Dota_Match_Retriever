@@ -39,7 +39,7 @@ public class Match {
         for (Player i : mPlayers) {
             if (i.getAccountId() == accountId && x < 5 && mRadiantWin)
                 return true;
-            if (i.getAccountId() == accountId && x > 5 && !mRadiantWin)
+            if (i.getAccountId() == accountId && x >= 5 && !mRadiantWin)
                 return true;
             x++;
         }

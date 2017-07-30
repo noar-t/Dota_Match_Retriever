@@ -18,10 +18,13 @@ public class Main {
     private static String mApiKey;    // unique api key to make requests
     private static String mAccountId; // id to make request
     private static String mSteamId3;  // id to parse from match data
+    private static String mDatabasePath = "jdbc:sqlite:test.db";
 
     public static void main(String[] args) throws Exception  {
         getDevValues();
-        establishDatabase("test.db");
+        Connection database = establishDatabase();
+        Match testMatch = new Match(25,true,13,14,null);
+        databaseAddMatch(database, testMatch);
 
         //Document XML = getMatchListXML("https://api.steampowered.com/IDOTA2Match_570/GetMatchHistory/V001/?format=XML&account_id="
         //        + mAccountId
@@ -76,10 +79,9 @@ public class Main {
 
     }
 
-    public static void establishDatabase(String fileName) {
+    public static Connection establishDatabase() {
 
-
-        String url = "jdbc:sqlite:" + fileName;
+        String url = mDatabasePath;
 
         Connection conn = null;
         try {
@@ -129,15 +131,22 @@ public class Main {
 
         } catch (SQLException e) {
             System.out.println(e.getMessage());
-        } finally {
-            try {
-                if (conn != null) {
-                conn.close();
-                }
-            } catch (SQLException ex) {
-            System.out.println(ex.getMessage());
-            }
         }
+        if (conn != null) {
+            return conn;
+        }
+        return null;
+    }
+
+    public static void databaseAddMatch(Connection database, Match match) throws SQLException{
+        String sql = "INSERT INTO matches(match_id, radiant_win, radiant_score, dire_score) VALUES(?,?,?,?)";
+
+        PreparedStatement pstmt = database.prepareStatement(sql);
+            pstmt.setLong(1, match.getMatchId());
+            pstmt.setInt(2, match.mRadiantWin ? 1 : 0);
+            pstmt.setInt(3, match.mRadiantScore);
+            pstmt.setInt(4, match.mDireScore);
+            pstmt.executeUpdate();
     }
 
     public static void getDevValues() throws Exception {
