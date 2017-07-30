@@ -89,6 +89,8 @@ public class Main {
                 System.out.println("The driver name is " + meta.getDriverName());
                 System.out.println("A new database has been created and or an existing database has been connected.");
 
+                Statement stmt = conn.createStatement();
+
                 String sql = "CREATE TABLE IF NOT EXISTS matches (\n"
                         + "	match_id INTEGER NOT NULL PRIMARY KEY,\n"
                         + "	radiant_win INTEGER NOT NULL,\n"
@@ -97,14 +99,8 @@ public class Main {
                         + "	duration INTEGER\n"
                         + ");";
 
-                Statement stmt = conn.createStatement();
                 stmt.execute(sql);
 
-                sql = "CREATE TABLE IF NOT EXISTS match_player_info (\n"
-                        + "	player INTEGER NOT NULL,\n"
-                        + "	matchId INTEGER NOT NULL\n"
-                        + ");";
-                stmt.execute(sql);
 
                 sql = "CREATE TABLE IF NOT EXISTS playersData (\n"
                         + "	playerId integer NOT NULL,\n"
