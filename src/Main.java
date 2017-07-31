@@ -122,9 +122,8 @@ public class Main {
 
                 sql = "CREATE TABLE IF NOT EXISTS players (\n"
                         + "	player_name TEXT,\n"
-                        + "	player_id INTEGER NOT NULL,"
-                        + "	id INTEGER NOT NULL, \n"
-                        + "     FOREIGN KEY (id) REFERENCES matches(match_id)\n"
+                        + "	player_id INTEGER NOT NULL, \n"
+                        //+ "     FOREIGN KEY (player_id) REFERENCES matches(match_id)\n"
                         + ");";
                 stmt.execute(sql);
             }
@@ -142,11 +141,20 @@ public class Main {
         String sql = "INSERT INTO matches(match_id, radiant_win, radiant_score, dire_score) VALUES(?,?,?,?)";
 
         PreparedStatement pstmt = database.prepareStatement(sql);
-            pstmt.setLong(1, match.getMatchId());
-            pstmt.setInt(2, match.mRadiantWin ? 1 : 0);
-            pstmt.setInt(3, match.mRadiantScore);
-            pstmt.setInt(4, match.mDireScore);
-            pstmt.executeUpdate();
+        pstmt.setLong(1, match.getMatchId());
+        pstmt.setInt(2, match.mRadiantWin ? 1 : 0);
+        pstmt.setInt(3, match.mRadiantScore);
+        pstmt.setInt(4, match.mDireScore);
+        pstmt.executeUpdate();
+    }
+
+    public static void databaseAddPlayer(Connection database, String playerName, long playerId) throws SQLException{
+        String sql = "INSERT INTO matches(player_name, player_id) VALUES(?,?,?)";
+
+        PreparedStatement pstmt = database.prepareStatement(sql);
+        pstmt.setString(1, playerName);
+        pstmt.setLong(2, playerId);
+        pstmt.executeUpdate();
     }
 
     public static void getDevValues() throws Exception {
