@@ -24,7 +24,7 @@ public class Main {
         getDevValues();
         Connection database = establishDatabase();
         Match testMatch = new Match(25,true,13,14,null);
-        databaseAddMatch(database, testMatch);
+        //databaseAddMatch(database, testMatch);
 
         //Document XML = getMatchListXML("https://api.steampowered.com/IDOTA2Match_570/GetMatchHistory/V001/?format=XML&account_id="
         //        + mAccountId
@@ -104,26 +104,28 @@ public class Main {
                 stmt.execute(sql);
 
 
-                sql = "CREATE TABLE IF NOT EXISTS playersData (\n"
-                        + "	playerId integer NOT NULL,\n"
-                        + "	matchId integer NOT NULL,\n" // foreign key? refe rences dotaMatches matchId
-                        + "	heroId integer NOT NULL,\n"
-                        + "	itemSlot0 INTEGER,\n"
-                        + "	itemSlot1 integer,\n"
-                        + "	itemSlot2 integer,\n"
-                        + "	itemSlot3 integer,\n"
-                        + "	itemSlot4 integer,\n"
-                        + "	itemSlot5 integer\n"
-                        + "	backSlot0 integer,\n"
-                        + "	backSlot1 integer,\n"
-                        + "	backSlot2 integer\n"
+                sql = "CREATE TABLE IF NOT EXISTS players_data (\n"
+                        + "	player_id INTEGER NOT NULL,\n"
+                        + "	match_id INTEGER NOT NULL,\n" // foreign key? references dotaMatches matchId
+                        + "	hero_id INTEGER NOT NULL,\n" // add future hero table
+                        + "	radiant_hero INTEGER NOT NULL,\n" // bool to designate team
+                        + "	item_slot0 INTEGER,\n"
+                        + "	item_slot1 INTEGER,\n"
+                        + "	item_slot2 INTEGER,\n"
+                        + "	item_slot3 INTEGER,\n"
+                        + "	item_slot4 INTEGER,\n"
+                        + "	item_slot5 INTEGER,\n"
+                        + "	back_slot0 INTEGER,\n"
+                        + "	back_slot1 INTEGER,\n"
+                        + "	back_slot2 INTEGER\n,"
+                        + "     FOREIGN KEY (player_id) REFERENCES players(player_id)\n," // link player ids to player table
+                        + "     FOREIGN KEY (match_id) REFERENCES matches(match_id)\n"
                         + ");";
                 stmt.execute(sql);
 
                 sql = "CREATE TABLE IF NOT EXISTS players (\n"
                         + "	player_name TEXT,\n"
-                        + "	player_id INTEGER NOT NULL, \n"
-                        //+ "     FOREIGN KEY (player_id) REFERENCES matches(match_id)\n"
+                        + "	player_id INTEGER NOT NULL PRIMARY KEY \n"
                         + ");";
                 stmt.execute(sql);
             }
@@ -139,6 +141,19 @@ public class Main {
 
     public static void databaseAddMatch(Connection database, Match match) throws SQLException{
         String sql = "INSERT INTO matches(match_id, radiant_win, radiant_score, dire_score) VALUES(?,?,?,?)";
+
+        PreparedStatement pstmt = database.prepareStatement(sql);
+        pstmt.setLong(1, match.getMatchId());
+        pstmt.setInt(2, match.mRadiantWin ? 1 : 0);
+        pstmt.setInt(3, match.mRadiantScore);
+        pstmt.setInt(4, match.mDireScore);
+        pstmt.executeUpdate();
+    }
+
+    public static void databaseAddPlayerData(Connection database, Match match) throws SQLException{
+        String sql = "INSERT INTO matches(player_id, match_id, hero_id, item_slot0," +
+                " item_slot1, item_slot2, item_slot3, item_slot4, item_slot5," +
+                " back_slot0, back_slot1, back_slot2) VALUES(?,?,?,?,?,?,?,?,?,?,?,?)";
 
         PreparedStatement pstmt = database.prepareStatement(sql);
         pstmt.setLong(1, match.getMatchId());
