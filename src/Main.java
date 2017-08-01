@@ -187,7 +187,17 @@ public class Main {
         ResultSet rs = pstmt.executeQuery();
 
         return rs.first();
-}
+    }
+
+    public static boolean databaseCheckMatch(Connection database, long match_id) throws SQLException{
+        String sql = "SELECT match_id FROM matches WHERE match_id = ?";
+        PreparedStatement pstmt  = database.prepareStatement(sql);
+
+        pstmt.setLong(1, match_id);
+        ResultSet rs = pstmt.executeQuery();
+
+        return rs.first();
+    }
 
     public static void getDevValues() throws Exception {
         try {
