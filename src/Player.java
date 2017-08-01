@@ -19,7 +19,7 @@ public class Player {
         return mAccountId;
     }
 
-    public int getmHeroId() {
+    public int getHeroId() {
         return mHeroId;
     }
 

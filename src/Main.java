@@ -26,18 +26,18 @@ public class Main {
         Match testMatch = new Match(25,true,13,14,null);
         //databaseAddMatch(database, testMatch);
 
-        //Document XML = getMatchListXML("https://api.steampowered.com/IDOTA2Match_570/GetMatchHistory/V001/?format=XML&account_id="
-        //        + mAccountId
-        //        + "&key="
-        //        + mApiKey);
+        Document XML = getMatchListXML("https://api.steampowered.com/IDOTA2Match_570/GetMatchHistory/V001/?format=XML&account_id="
+                + mAccountId
+                + "&key="
+                + mApiKey);
 
         ArrayList<Long> mMatches = null;
-        //mMatches = getMatchArrayList(XML); // returns long array of match id
+        mMatches = getMatchArrayList(XML); // returns long array of match id
 
         int totalCount = 0;
         int outputTestInt = 0;
         ArrayList<Match> matchObjects = new ArrayList<>();
-        /*if (mMatches != null) {
+        if (mMatches != null) {
             for (Long i : mMatches) {
                 Thread.sleep(100);
                 matchObjects.add(getMatchDetails(i));
@@ -47,7 +47,7 @@ public class Main {
                 outputTestInt++;
                 totalCount++;
             }
-            for (int x = 0; x < 5; x++) {
+            for (int x = 0; x < 4; x++) {
                 outputTestInt = 0;
                 XML = getMatchListXML("https://api.steampowered.com/IDOTA2Match_570/GetMatchHistory/V001/?format=XML&start_at_match_id="
                         + mMatches.get(mMatches.size() - 1)
@@ -68,14 +68,11 @@ public class Main {
                     totalCount++;
                 }
             }
-        }*/
-        //System.out.println("END TOTAL = " + totalCount
-        //        + "\nARRAY SIZE = " + matchObjects.size());
-        //System.out.println("Win Rate Test : " + calcWinRate(matchObjects, Long.parseLong(mAccountId)));
+        }
+        System.out.println("END TOTAL = " + totalCount
+                + "\nARRAY SIZE = " + matchObjects.size());
 
-       /* matchObjects.add(getMatchDetails(3256365647l));
-        matchObjects.add(getMatchDetails(3254280056l));
-        System.out.println("Win Rate Testing : " + calcWinRate(matchObjects, Long.parseLong(mSteamId3)));*/
+        database.close();
 
     }
 
@@ -150,16 +147,26 @@ public class Main {
         pstmt.executeUpdate();
     }
 
-    public static void databaseAddPlayerData(Connection database, Match match) throws SQLException{
+    public static void databaseAddPlayerData(Connection database, long matchId, Player player) throws SQLException{
         String sql = "INSERT INTO matches(player_id, match_id, hero_id, item_slot0," +
                 " item_slot1, item_slot2, item_slot3, item_slot4, item_slot5," +
                 " back_slot0, back_slot1, back_slot2) VALUES(?,?,?,?,?,?,?,?,?,?,?,?)";
 
         PreparedStatement pstmt = database.prepareStatement(sql);
-        pstmt.setLong(1, match.getMatchId());
-        pstmt.setInt(2, match.mRadiantWin ? 1 : 0);
-        pstmt.setInt(3, match.mRadiantScore);
-        pstmt.setInt(4, match.mDireScore);
+        pstmt.setLong(1, player.getAccountId());
+        pstmt.setLong(2, matchId);
+        pstmt.setInt(3, player.getHeroId());
+        int items[] = player.getItemSlots();
+        pstmt.setInt(4, items[0]);
+        pstmt.setInt(5, items[1]);
+        pstmt.setInt(6, items[2]);
+        pstmt.setInt(7, items[3]);
+        pstmt.setInt(8, items[4]);
+        pstmt.setInt(9, items[5]);
+        int backpack[] = player.getBackPackSlots();
+        pstmt.setInt(10, backpack[0]);
+        pstmt.setInt(11, backpack[1]);
+        pstmt.setInt(12, backpack[2]);
         pstmt.executeUpdate();
     }
 
@@ -171,6 +178,16 @@ public class Main {
         pstmt.setLong(2, playerId);
         pstmt.executeUpdate();
     }
+
+    public static boolean databaseCheckPlayer(Connection database, long player_id) throws SQLException{
+        String sql = "SELECT player_id FROM players WHERE player_id = ?";
+        PreparedStatement pstmt  = database.prepareStatement(sql);
+
+        pstmt.setLong(1, player_id);
+        ResultSet rs = pstmt.executeQuery();
+
+        return rs.first();
+}
 
     public static void getDevValues() throws Exception {
         try {
