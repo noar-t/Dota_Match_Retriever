@@ -103,8 +103,36 @@ public class DatabaseHandler {
         pstmt.executeUpdate();
     }
 
+    public Player databaseRetrievePlayerData(long player_id, long match_id) throws SQLException {
+        String sql = "SELECT * FROM players WHERE player_id = ? AND match_id = ?";
+        PreparedStatement pstmt  = database.prepareStatement(sql);
+
+        pstmt.setLong(1, player_id);
+        pstmt.setLong(2, match_id);
+
+
+        long accountId = 0;
+        int heroId = 0;
+        int[] itemSlots = new int[6];
+        int[] backPackSlots = new int[3];
+
+        ResultSet rs = pstmt.executeQuery();
+        while (rs.next()) {
+            accountId = rs.getLong("player_id");
+            heroId = rs.getInt("hero_id");
+            for (int i = 0; i < 6; i++)
+                itemSlots[i] = rs.getInt("item_slot" + i);
+            for (int i = 0; i < 3; i++)
+                backPackSlots[i] = rs.getInt("back_slot" + i);
+
+
+        }
+
+        return new Player(accountId, heroId, itemSlots, backPackSlots);
+    }
+
     public boolean databaseCheckPlayer(long player_id) throws SQLException{
-        String sql = "SELECT player_id FROM players WHERE player_id = ?";
+        String sql = "SELECT * FROM players WHERE player_id = ? ";
         PreparedStatement pstmt  = database.prepareStatement(sql);
 
         pstmt.setLong(1, player_id);
@@ -113,8 +141,19 @@ public class DatabaseHandler {
         return rs.first();
     }
 
+    public boolean databaseCheckPlayerData(long player_id, long match_id) throws SQLException{
+        String sql = "SELECT * FROM players WHERE player_id = ? AND match_id = ?";
+        PreparedStatement pstmt  = database.prepareStatement(sql);
+
+        pstmt.setLong(1, player_id);
+        pstmt.setLong(2, match_id);
+        ResultSet rs = pstmt.executeQuery();
+
+        return rs.first();
+    }
+
     public boolean databaseCheckMatch(long match_id) throws SQLException{
-        String sql = "SELECT match_id FROM matches WHERE match_id = ?";
+        String sql = "SELECT * FROM matches WHERE match_id = ?";
         PreparedStatement pstmt  = database.prepareStatement(sql);
 
         pstmt.setLong(1, match_id);
