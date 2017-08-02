@@ -30,6 +30,7 @@ public class DatabaseHandler {
                 sql = "CREATE TABLE IF NOT EXISTS players_data (\n"
                         + "	player_id INTEGER NOT NULL,\n"
                         + "	match_id INTEGER NOT NULL,\n" // foreign key? references dotaMatches matchId
+                        + "	player_slot INTEGER NOT NULL,\n"
                         + "	hero_id INTEGER NOT NULL,\n" // add future hero table
                         + "	radiant_hero INTEGER NOT NULL,\n" // bool to designate team
                         + "	item_slot0 INTEGER,\n"

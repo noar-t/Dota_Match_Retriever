@@ -1,0 +1,11 @@
+# User Specific Dev Files
+*.txtkey
+
+# Compiled Java
+*.class
+
+# Libraries
+*.jar
+
+# Databases
+*.db
