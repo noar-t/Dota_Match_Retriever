@@ -1,3 +1,5 @@
+//import com.sun.tools.javac.util.Pair;
+import javafx.util.Pair;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.Nullable;
 import org.w3c.dom.Document;
@@ -20,12 +22,15 @@ public class Main {
     private static String mSteamId3;  // id to parse from match data
 
     public static void main(String[] args) throws Exception  {
+        //javafx.util.Pair testOPair = new Pair("testing123", 123);
+       /// Pair testPair = new Pair(5,7);
+        //System.out.println("left"+ testOPair.getKey() + "right" + testOPair.getValue());
         getDevValues();
-        DatabaseHandler dbHandle = new DatabaseHandler();
+        DatabaseHandler dbHandler = new DatabaseHandler();
         Match testMatch = new Match(25,true,13,14,null);
-        dbHandle.databaseAddMatch(testMatch);
+        //dbHandler.databaseAddMatch(testMatch);
 
-        Document XML = getMatchListXML("https://api.steampowered.com/IDOTA2Match_570/GetMatchHistory/V001/?format=XML&account_id="
+        /*Document XML = getMatchListXML("https://api.steampowered.com/IDOTA2Match_570/GetMatchHistory/V001/?format=XML&account_id="
                 + mAccountId
                 + "&key="
                 + mApiKey);
@@ -69,9 +74,9 @@ public class Main {
             }
         }
         System.out.println("END TOTAL = " + totalCount
-                + "\nARRAY SIZE = " + matchObjects.size());
+                + "\nARRAY SIZE = " + matchObjects.size());*/
 
-        database.close();
+        dbHandler.close();
 
     }
 

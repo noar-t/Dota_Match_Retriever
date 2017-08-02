@@ -122,4 +122,15 @@ public class DatabaseHandler {
 
         return rs.first();
     }
+
+    public void close(){
+        try {
+            System.out.println("Database connection closed");
+            database.close();
+        }
+        catch (SQLException e){
+            System.out.println("Problem closing connection with database");
+            System.out.println(e.getMessage());
+        }
+    }
 }
