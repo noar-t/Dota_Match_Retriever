@@ -1,5 +1,4 @@
 //import com.sun.tools.javac.util.Pair;
-import javafx.util.Pair;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.Nullable;
 
@@ -25,7 +24,9 @@ public class Main {
         //System.out.println("left"+ testOPair.getKey() + "right" + testOPair.getValue());
         getDevValues();
         DatabaseHandler dbHandler = new DatabaseHandler();
-        Match testMatch = new Match(25,true,13,14,null);
+
+        //testing
+        //Match testMatch = new Match(25,true,13,14,null);
         //dbHandler.databaseAddMatch(testMatch);
 
         /*Document XML = getMatchListXML("https://api.steampowered.com/IDOTA2Match_570/GetMatchHistory/V001/?format=XML&account_id="
@@ -182,6 +183,7 @@ public class Main {
         NodeList XML_Players = XML.getElementsByTagName("player");
 
         long accountId;
+        int playerSlot;
         int playerHeroId;
         ArrayList<Player> matchPlayers = new ArrayList<>();
 
@@ -194,6 +196,13 @@ public class Main {
                         .getElementsByTagName("account_id")
                         .item(0)
                         .getTextContent());
+
+//need to add player slot to
+            playerSlot = Integer
+                    .parseInt(playerElement.getElementsByTagName("player_slot")
+                        .item(0)
+                        .getTextContent());
+
 
             playerHeroId = Integer
                     .parseInt(playerElement
@@ -219,7 +228,7 @@ public class Main {
                             .item(0)
                             .getTextContent());
             }
-            matchPlayers.add(new Player(accountId, playerHeroId, playerItems, backpackPlayerItems));
+            matchPlayers.add(new Player(accountId, playerHeroId, playerSlot, backpackPlayerItems, playerItems));
         }
         //System.out.println(new Match(matchId, radiantWin, radiantScore, direScore, matchPlayers));
         return new Match(matchId, radiantWin, radiantScore, direScore, matchPlayers);

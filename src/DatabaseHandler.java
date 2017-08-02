@@ -72,7 +72,7 @@ public class DatabaseHandler {
     }
 
     public void databaseAddPlayerData(long matchId, Player player) throws SQLException{
-        String sql = "INSERT INTO matches(player_id, match_id, hero_id, item_slot0," +
+        String sql = "INSERT INTO players_data(player_id, match_id, hero_id, item_slot0," +
                 " item_slot1, item_slot2, item_slot3, item_slot4, item_slot5," +
                 " back_slot0, back_slot1, back_slot2) VALUES(?,?,?,?,?,?,?,?,?,?,?,?)";
 
@@ -104,7 +104,7 @@ public class DatabaseHandler {
     }
 
     public Player databaseRetrievePlayerData(long player_id, long match_id) throws SQLException {
-        String sql = "SELECT * FROM players WHERE player_id = ? AND match_id = ?";
+        String sql = "SELECT * FROM players_data WHERE player_id = ? AND match_id = ?";
         PreparedStatement pstmt  = database.prepareStatement(sql);
 
         pstmt.setLong(1, player_id);
@@ -128,7 +128,7 @@ public class DatabaseHandler {
 
         }
 
-        return new Player(accountId, heroId, itemSlots, backPackSlots);
+        return new Player(accountId, heroId, 0, backPackSlots, itemSlots);
     }
 
     public boolean databaseCheckPlayer(long player_id) throws SQLException{

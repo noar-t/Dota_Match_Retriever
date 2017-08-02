@@ -8,7 +8,7 @@ public class Player {
     int[] mBackPackSlots;
     //int[] mLevelApiblity; needs to be constructed if i implement this
 
-    public Player(long accountId, int heroId, int[] itemSlots, int[] backPackSlots) {
+    public Player(long accountId, int heroId, int playerSlot, int[] backPackSlots, int[] itemSlots) {
         mAccountId = accountId;
         mHeroId = heroId;
         mItemSlots = itemSlots;
