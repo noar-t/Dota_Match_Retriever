@@ -27,16 +27,42 @@ public class Main {
         //Match testMatch = new Match(25,true,13,14,null);
         //dbHandler.databaseAddMatch(testMatch);
 
-        Document XML = getMatchListXML("https://api.steampowered.com/IDOTA2Match_570/GetMatchHistory/V001/?format=XML&account_id="
-                + mAccountId
-                + "&key="
-                + mApiKey);
+        if (!dbHandler.databasePreexist())
+            populateNewDatabase(dbHandler);
+        else
+            //need to handle returning user
+
+
+        dbHandler.close();
+
+    }
+
+
+
+    public static void getDevValues() throws Exception {
+        try {
+            File apiKeyFile = new File("DevKey.txtkey");
+            BufferedReader lineReader = new BufferedReader(new FileReader(apiKeyFile));
+            mApiKey = lineReader.readLine(); // need to read from file
+            mAccountId = lineReader.readLine();
+            mSteamId3 = lineReader.readLine();
+        }
+        catch (FileNotFoundException e) {
+            System.out.println("File not present or file in wrong directory");
+        }
+    }
+
+    public static void populateNewDatabase (DatabaseHandler dbHandler) throws Exception {
 
         int totalCount = 0;
         int outputTestInt = 0;
         ArrayList<Long> mMatches = null;
         ArrayList<Match> matchObjects = new ArrayList<>();
 
+        Document XML = getMatchListXML("https://api.steampowered.com/IDOTA2Match_570/GetMatchHistory/V001/?format=XML&account_id="
+                + mAccountId
+                + "&key="
+                + mApiKey);
         mMatches = getMatchArrayList(XML); // returns long array of match id
 
         if (mMatches != null) {
@@ -66,26 +92,18 @@ public class Main {
         System.out.println("END TOTAL = " + totalCount
                 + "\nARRAY SIZE = " + matchObjects.size());
 
-        for (Match i : matchObjects)
-            dbHandler.databaseAddMatch(i);
-
-        dbHandler.close();
-
-    }
-
-
-
-    public static void getDevValues() throws Exception {
-        try {
-            File apiKeyFile = new File("DevKey.txtkey");
-            BufferedReader lineReader = new BufferedReader(new FileReader(apiKeyFile));
-            mApiKey = lineReader.readLine(); // need to read from file
-            mAccountId = lineReader.readLine();
-            mSteamId3 = lineReader.readLine();
+        for (Match i : matchObjects) {
+            if (i != null) {
+                dbHandler.databaseAddMatch(i);
+                for (Player x : i.getPlayers()) {
+                    dbHandler.databaseAddPlayerData(i.getMatchId(), x);
+                }
+            }
+            // need to add player initializations
+            // need to add player datas
         }
-        catch (FileNotFoundException e) {
-            System.out.println("File not present or file in wrong directory");
-        }
+
+
     }
 
     @Nullable
