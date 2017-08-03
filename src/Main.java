@@ -10,7 +10,6 @@ import org.w3c.dom.NodeList;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.*;
-import java.sql.Connection;
 import java.util.ArrayList;
 
 public class Main {
@@ -20,9 +19,7 @@ public class Main {
     private static String mSteamId3;  // id to parse from match data
 
     public static void main(String[] args) throws Exception {
-        //javafx.util.Pair testOPair = new Pair("testing123", 123);
-       /// Pair testPair = new Pair(5,7);
-        //System.out.println("left"+ testOPair.getKey() + "right" + testOPair.getValue());
+
         getDevValues();
         DatabaseHandler dbHandler = new DatabaseHandler();
 
@@ -30,38 +27,30 @@ public class Main {
         //Match testMatch = new Match(25,true,13,14,null);
         //dbHandler.databaseAddMatch(testMatch);
 
-        /*Document XML = getMatchListXML("https://api.steampowered.com/IDOTA2Match_570/GetMatchHistory/V001/?format=XML&account_id="
+        Document XML = getMatchListXML("https://api.steampowered.com/IDOTA2Match_570/GetMatchHistory/V001/?format=XML&account_id="
                 + mAccountId
                 + "&key="
                 + mApiKey);
 
-        ArrayList<Long> mMatches = null;
-        mMatches = getMatchArrayList(XML); // returns long array of match id
-
         int totalCount = 0;
         int outputTestInt = 0;
+        ArrayList<Long> mMatches = null;
         ArrayList<Match> matchObjects = new ArrayList<>();
-        if (mMatches != null) {
-            for (Long i : mMatches) {
-                Thread.sleep(100);
-                matchObjects.add(getMatchDetails(i));
-                System.out.println(matchObjects.get(outputTestInt) != null
-                        ? matchObjects.get(outputTestInt)
-                        : "Bad Match");
-                outputTestInt++;
-                totalCount++;
-            }
-            for (int x = 0; x < 4; x++) {
-                outputTestInt = 0;
-                XML = getMatchListXML("https://api.steampowered.com/IDOTA2Match_570/GetMatchHistory/V001/?format=XML&start_at_match_id="
-                        + mMatches.get(mMatches.size() - 1)
-                        + "&account_id="
-                        + mAccountId
-                        + "&key="
-                        + mApiKey);
-                mMatches = getMatchArrayList(XML);
-                mMatches.remove(0);
 
+        mMatches = getMatchArrayList(XML); // returns long array of match id
+
+        if (mMatches != null) {
+            for (int x = 0; x < 5; x++) {
+                if (x > 0) {
+                    XML = getMatchListXML("https://api.steampowered.com/IDOTA2Match_570/GetMatchHistory/V001/?format=XML&start_at_match_id="
+                            + mMatches.get(mMatches.size() - 1)
+                            + "&account_id="
+                            + mAccountId
+                            + "&key="
+                            + mApiKey);
+                    mMatches = getMatchArrayList(XML);
+                    mMatches.remove(0);
+                }
                 for (Long i : mMatches) {
                     Thread.sleep(100);
                     matchObjects.add(getMatchDetails(i));
@@ -73,8 +62,9 @@ public class Main {
                 }
             }
         }
+
         System.out.println("END TOTAL = " + totalCount
-                + "\nARRAY SIZE = " + matchObjects.size());*/
+                + "\nARRAY SIZE = " + matchObjects.size());
 
         dbHandler.close();
 
@@ -91,7 +81,7 @@ public class Main {
             mSteamId3 = lineReader.readLine();
         }
         catch (FileNotFoundException e) {
-            System.out.println("File not present or file in wrong directory\n");
+            System.out.println("File not present or file in wrong directory");
         }
     }
 
@@ -105,7 +95,7 @@ public class Main {
             return web_XML;
         }
         catch (IOException e) {
-            System.out.println("HTTP Request failed, check api key\n");
+            System.out.println("HTTP Request failed, check api key");
         }
         return null;
     }
@@ -176,10 +166,11 @@ public class Main {
                     .getTextContent());
 
         // not sure best way to convert seconds to min:sec
-        /*System.out.println(XML
-                .getElementsByTagName("duration")
-                .item(0)
-                .getTextContent());*/
+        int matchDuration = Integer
+                .parseInt(XML
+                    .getElementsByTagName("duration")
+                    .item(0)
+                    .getTextContent());
 
         NodeList XML_Players = XML.getElementsByTagName("player");
 
@@ -198,7 +189,6 @@ public class Main {
                         .item(0)
                         .getTextContent());
 
-//need to add player slot to
             playerSlot = Integer
                     .parseInt(playerElement.getElementsByTagName("player_slot")
                         .item(0)
@@ -232,7 +222,7 @@ public class Main {
             matchPlayers.add(new Player(accountId, playerHeroId, playerSlot, backpackPlayerItems, playerItems));
         }
         //System.out.println(new Match(matchId, radiantWin, radiantScore, direScore, matchPlayers));
-        return new Match(matchId, radiantWin, radiantScore, direScore, matchPlayers);
+        return new Match(matchId, radiantWin, radiantScore, direScore, matchDuration, matchPlayers);
     }
 
     public static double calcWinRate(ArrayList<Match> Matches, long AccountId) {

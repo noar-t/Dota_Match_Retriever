@@ -4,22 +4,32 @@ import java.util.ArrayList;
  * Created by noah on 5/31/17.
  */
 public class Match {
-    long mMatchId;
-    int mRadiantScore;
-    int mDireScore;
-    boolean mValidMatch;
-    boolean mRadiantWin;
-    ArrayList<Player> mPlayers;
+    private long mMatchId;
+    private int mRadiantScore;
+    private int mDireScore;
+    private int mMatchDuration;
+    private boolean mValidMatch;
+    private boolean mRadiantWin;
+    private ArrayList<Player> mPlayers;
 
 
-    public Match(long matchId, boolean radiantWin, int radiantScore, int direScore, ArrayList<Player> players) {
+    public Match(long matchId, boolean radiantWin, int radiantScore, int direScore, int matchDuration, ArrayList<Player> players) {
         mMatchId = matchId;
         mRadiantScore = radiantScore;
         mDireScore = direScore;
+        mMatchDuration = matchDuration;
         mValidMatch = matchId > 0; // catches 1v1s or any other not 5v5
         mRadiantWin = radiantWin;
 
         mPlayers = players;
+    }
+
+    public long getMatchId() {
+        return mMatchId;
+    }
+
+    public int getMatchDuration() {
+        return mMatchDuration;
     }
 
     public int getRadiantScore() {
@@ -32,10 +42,6 @@ public class Match {
 
     public boolean isRadiantWin() {
         return mRadiantWin;
-    }
-
-    public long getMatchId() {
-        return mMatchId;
     }
 
     public ArrayList<Player> getPlayers() {
