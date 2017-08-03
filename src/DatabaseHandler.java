@@ -78,15 +78,20 @@ public class DatabaseHandler {
     }
 
     public void databaseAddMatch(Match match) throws SQLException {
-        String sql = "INSERT INTO matches(match_id, radiant_win, radiant_score, dire_score, duration) VALUES(?,?,?,?,?)";
 
-        PreparedStatement pstmt = database.prepareStatement(sql);
-        pstmt.setLong(1, match.getMatchId());
-        pstmt.setInt(2, match.isRadiantWin() ? 1 : 0);
-        pstmt.setInt(3, match.getRadiantScore());
-        pstmt.setInt(4, match.getDireScore());
-        pstmt.setInt(5, match.getMatchDuration());
-        pstmt.executeUpdate();
+        if (match != null) {
+            String sql = "INSERT INTO matches(match_id, radiant_win, radiant_score, dire_score, duration) VALUES(?,?,?,?,?)";
+
+            PreparedStatement pstmt = database.prepareStatement(sql);
+            pstmt.setLong(1, match.getMatchId());
+            pstmt.setInt(2, match.isRadiantWin() ? 1 : 0);
+            pstmt.setInt(3, match.getRadiantScore());
+            pstmt.setInt(4, match.getDireScore());
+            pstmt.setInt(5, match.getMatchDuration());
+            pstmt.executeUpdate();
+        }
+        else
+            System.out.println("tried to insert null match");
     }
 
     public void databaseAddPlayerData(long matchId, Player player) throws SQLException {
