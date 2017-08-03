@@ -66,6 +66,9 @@ public class Main {
         System.out.println("END TOTAL = " + totalCount
                 + "\nARRAY SIZE = " + matchObjects.size());
 
+        for (Match i : matchObjects)
+            dbHandler.databaseAddMatch(i);
+
         dbHandler.close();
 
     }
