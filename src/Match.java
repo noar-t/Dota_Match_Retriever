@@ -22,6 +22,18 @@ public class Match {
         mPlayers = players;
     }
 
+    public int getRadiantScore() {
+        return mRadiantScore;
+    }
+
+    public int getDireScore() {
+        return mDireScore;
+    }
+
+    public boolean isRadiantWin() {
+        return mRadiantWin;
+    }
+
     public long getMatchId() {
         return mMatchId;
     }

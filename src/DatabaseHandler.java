@@ -6,52 +6,64 @@ import java.sql.*;
 public class DatabaseHandler {
     private final String mDatabasePath = "jdbc:sqlite:test.db";
     private Connection database;
+    private boolean mDatabasePreexist;
 
     public DatabaseHandler() {
         try {
             database = DriverManager.getConnection(mDatabasePath);
             if (database != null) {
+
                 DatabaseMetaData meta = database.getMetaData();
+
+                // check if database is already initialized
+                ResultSet rs = meta.getTables(null, null, "matches", null);
+                mDatabasePreexist = rs.next();
+                rs = meta.getTables(null, null, "players", null);
+                mDatabasePreexist = mDatabasePreexist && rs.next();
+                rs = meta.getTables(null, null, "players_data", null);
+                mDatabasePreexist = rs.next();
                 System.out.println("The driver name is " + meta.getDriverName());
                 System.out.println("A new database has been created and or an existing database has been connected.");
 
-                String sql = "CREATE TABLE IF NOT EXISTS matches (\n"
-                        + "	match_id INTEGER NOT NULL PRIMARY KEY,\n"
-                        + "	radiant_win INTEGER NOT NULL,\n"
-                        + "	radiant_score INTEGER NOT NULL,\n"
-                        + "	dire_score INTEGER NOT NULL,\n"
-                        + "	duration INTEGER\n"
-                        + ");";
+                if (mDatabasePreexist == false) {
+                    String sql = "CREATE TABLE IF NOT EXISTS matches (\n"
+                            + "	match_id INTEGER NOT NULL PRIMARY KEY,\n"
+                            + "	radiant_win INTEGER NOT NULL,\n"
+                            + "	radiant_score INTEGER NOT NULL,\n"
+                            + "	dire_score INTEGER NOT NULL,\n"
+                            + "	duration INTEGER\n"
+                            + ");";
 
-                Statement stmt = database.createStatement();
-                stmt.execute(sql);
+                    Statement stmt = database.createStatement();
+                    stmt.execute(sql);
 
 
-                sql = "CREATE TABLE IF NOT EXISTS players_data (\n"
-                        + "	player_id INTEGER NOT NULL,\n"
-                        + "	match_id INTEGER NOT NULL,\n" // foreign key? references dotaMatches matchId
-                        + "	player_slot INTEGER NOT NULL,\n"
-                        + "	hero_id INTEGER NOT NULL,\n" // add future hero table
-                        + "	radiant_hero INTEGER NOT NULL,\n" // bool to designate team
-                        + "	item_slot0 INTEGER,\n"
-                        + "	item_slot1 INTEGER,\n"
-                        + "	item_slot2 INTEGER,\n"
-                        + "	item_slot3 INTEGER,\n"
-                        + "	item_slot4 INTEGER,\n"
-                        + "	item_slot5 INTEGER,\n"
-                        + "	back_slot0 INTEGER,\n"
-                        + "	back_slot1 INTEGER,\n"
-                        + "	back_slot2 INTEGER\n,"
-                        + "     FOREIGN KEY (player_id) REFERENCES players(player_id)\n," // link player ids to player table
-                        + "     FOREIGN KEY (match_id) REFERENCES matches(match_id)\n"
-                        + ");";
-                stmt.execute(sql);
+                    sql = "CREATE TABLE IF NOT EXISTS players_data (\n"
+                            + "	player_id INTEGER NOT NULL,\n"
+                            + "	match_id INTEGER NOT NULL,\n" // foreign key? references dotaMatches matchId
+                            + "	player_slot INTEGER NOT NULL,\n"
+                            + "	hero_id INTEGER NOT NULL,\n" // add future hero table
+                            + "	radiant_hero INTEGER NOT NULL,\n" // bool to designate team
+                            + "	item_slot0 INTEGER,\n"
+                            + "	item_slot1 INTEGER,\n"
+                            + "	item_slot2 INTEGER,\n"
+                            + "	item_slot3 INTEGER,\n"
+                            + "	item_slot4 INTEGER,\n"
+                            + "	item_slot5 INTEGER,\n"
+                            + "	back_slot0 INTEGER,\n"
+                            + "	back_slot1 INTEGER,\n"
+                            + "	back_slot2 INTEGER\n,"
+                            + "     FOREIGN KEY (player_id) REFERENCES players(player_id)\n," // link player ids to player table
+                            + "     FOREIGN KEY (match_id) REFERENCES matches(match_id)\n"
+                            + ");";
+                    stmt.execute(sql);
 
-                sql = "CREATE TABLE IF NOT EXISTS players (\n"
-                        + "	player_name TEXT,\n"
-                        + "	player_id INTEGER NOT NULL PRIMARY KEY \n"
-                        + ");";
-                stmt.execute(sql);
+                    sql = "CREATE TABLE IF NOT EXISTS players (\n"
+                            + "	player_name TEXT,\n"
+                            + "	player_id INTEGER NOT NULL PRIMARY KEY \n"
+                            + ");";
+                    stmt.execute(sql);
+                }
             }
 
         }
@@ -61,18 +73,22 @@ public class DatabaseHandler {
         }
     }
 
-    public void databaseAddMatch(Match match) throws SQLException{
+    public boolean databasePreexist() {
+        return mDatabasePreexist;
+    }
+
+    public void databaseAddMatch(Match match) throws SQLException {
         String sql = "INSERT INTO matches(match_id, radiant_win, radiant_score, dire_score) VALUES(?,?,?,?)";
 
         PreparedStatement pstmt = database.prepareStatement(sql);
         pstmt.setLong(1, match.getMatchId());
-        pstmt.setInt(2, match.mRadiantWin ? 1 : 0);
-        pstmt.setInt(3, match.mRadiantScore);
-        pstmt.setInt(4, match.mDireScore);
+        pstmt.setInt(2, match.isRadiantWin() ? 1 : 0);
+        pstmt.setInt(3, match.getRadiantScore());
+        pstmt.setInt(4, match.getDireScore());
         pstmt.executeUpdate();
     }
 
-    public void databaseAddPlayerData(long matchId, Player player) throws SQLException{
+    public void databaseAddPlayerData(long matchId, Player player) throws SQLException {
         String sql = "INSERT INTO players_data(player_id, match_id, hero_id, item_slot0," +
                 " item_slot1, item_slot2, item_slot3, item_slot4, item_slot5," +
                 " back_slot0, back_slot1, back_slot2) VALUES(?,?,?,?,?,?,?,?,?,?,?,?)";
@@ -95,7 +111,7 @@ public class DatabaseHandler {
         pstmt.executeUpdate();
     }
 
-    public void databaseAddPlayer(String playerName, long playerId) throws SQLException{
+    public void databaseAddPlayer(String playerName, long playerId) throws SQLException {
         String sql = "INSERT INTO matches(player_name, player_id) VALUES(?,?,?)";
 
         PreparedStatement pstmt = database.prepareStatement(sql);
@@ -132,7 +148,7 @@ public class DatabaseHandler {
         return new Player(accountId, heroId, 0, backPackSlots, itemSlots);
     }
 
-    public boolean databaseCheckPlayer(long player_id) throws SQLException{
+    public boolean databaseCheckPlayer(long player_id) throws SQLException {
         String sql = "SELECT * FROM players WHERE player_id = ? ";
         PreparedStatement pstmt  = database.prepareStatement(sql);
 
@@ -142,7 +158,7 @@ public class DatabaseHandler {
         return rs.first();
     }
 
-    public boolean databaseCheckPlayerData(long player_id, long match_id) throws SQLException{
+    public boolean databaseCheckPlayerData(long player_id, long match_id) throws SQLException {
         String sql = "SELECT * FROM players WHERE player_id = ? AND match_id = ?";
         PreparedStatement pstmt  = database.prepareStatement(sql);
 
@@ -153,7 +169,7 @@ public class DatabaseHandler {
         return rs.first();
     }
 
-    public boolean databaseCheckMatch(long match_id) throws SQLException{
+    public boolean databaseCheckMatch(long match_id) throws SQLException {
         String sql = "SELECT * FROM matches WHERE match_id = ?";
         PreparedStatement pstmt  = database.prepareStatement(sql);
 
@@ -163,7 +179,7 @@ public class DatabaseHandler {
         return rs.first();
     }
 
-    public void close(){
+    public void close() {
         try {
             System.out.println("Database connection closed");
             database.close();

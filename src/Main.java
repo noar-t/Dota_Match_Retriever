@@ -10,6 +10,7 @@ import org.w3c.dom.NodeList;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.*;
+import java.sql.Connection;
 import java.util.ArrayList;
 
 public class Main {
@@ -18,7 +19,7 @@ public class Main {
     private static String mAccountId; // id to make request
     private static String mSteamId3;  // id to parse from match data
 
-    public static void main(String[] args) throws Exception  {
+    public static void main(String[] args) throws Exception {
         //javafx.util.Pair testOPair = new Pair("testing123", 123);
        /// Pair testPair = new Pair(5,7);
         //System.out.println("left"+ testOPair.getKey() + "right" + testOPair.getValue());
