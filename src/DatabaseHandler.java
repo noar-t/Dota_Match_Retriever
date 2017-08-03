@@ -43,7 +43,6 @@ public class DatabaseHandler {
                             + "	match_id INTEGER NOT NULL,\n" // foreign key? references dotaMatches matchId
                             + "	player_slot INTEGER NOT NULL,\n"
                             + "	hero_id INTEGER NOT NULL,\n" // add future hero table
-                            + "	radiant_hero INTEGER NOT NULL,\n" // bool to designate team
                             + "	item_slot0 INTEGER,\n"
                             + "	item_slot1 INTEGER,\n"
                             + "	item_slot2 INTEGER,\n"
@@ -95,25 +94,40 @@ public class DatabaseHandler {
     }
 
     public void databaseAddPlayerData(long matchId, Player player) throws SQLException {
-        String sql = "INSERT INTO players_data(player_id, match_id, hero_id, item_slot0," +
+        String sql = "INSERT INTO players_data(player_id, match_id, hero_id, player_slot, item_slot0," +
                 " item_slot1, item_slot2, item_slot3, item_slot4, item_slot5," +
-                " back_slot0, back_slot1, back_slot2) VALUES(?,?,?,?,?,?,?,?,?,?,?,?)";
+                " back_slot0, back_slot1, back_slot2) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
         PreparedStatement pstmt = database.prepareStatement(sql);
+        /*System.out.println(player.getAccountId());
+        System.out.println(matchId);
+        System.out.println(player.getHeroId());
+        System.out.println(player.getAccountId());
+        System.out.println(player.getPlayerSlot());*/
         pstmt.setLong(1, player.getAccountId());
         pstmt.setLong(2, matchId);
         pstmt.setInt(3, player.getHeroId());
+        pstmt.setInt(4, player.getPlayerSlot());
         int items[] = player.getItemSlots();
-        pstmt.setInt(4, items[0]);
-        pstmt.setInt(5, items[1]);
-        pstmt.setInt(6, items[2]);
-        pstmt.setInt(7, items[3]);
-        pstmt.setInt(8, items[4]);
-        pstmt.setInt(9, items[5]);
+        /*System.out.println(items[0]);
+        System.out.println(items[1]);
+        System.out.println(items[2]);
+        System.out.println(items[3]);
+        System.out.println(items[4]);
+        System.out.println(items[5]);*/
+        pstmt.setInt(5, items[0]);
+        pstmt.setInt(6, items[1]);
+        pstmt.setInt(7, items[2]);
+        pstmt.setInt(8, items[3]);
+        pstmt.setInt(9, items[4]);
+        pstmt.setInt(10, items[5]);
         int backpack[] = player.getBackPackSlots();
-        pstmt.setInt(10, backpack[0]);
-        pstmt.setInt(11, backpack[1]);
-        pstmt.setInt(12, backpack[2]);
+        /*System.out.println(backpack[0]);
+        System.out.println(backpack[1]);
+        System.out.println(backpack[2]);*/
+        pstmt.setInt(11, backpack[0]);
+        pstmt.setInt(12, backpack[1]);
+        pstmt.setInt(13, backpack[2]);
         pstmt.executeUpdate();
     }
 

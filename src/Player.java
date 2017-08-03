@@ -4,6 +4,7 @@
 public class Player {
     long mAccountId;
     int mHeroId;
+    int mPlayerSlot;
     int[] mItemSlots;
     int[] mBackPackSlots;
     //int[] mLevelApiblity; needs to be constructed if i implement this
@@ -11,6 +12,7 @@ public class Player {
     public Player(long accountId, int heroId, int playerSlot, int[] backPackSlots, int[] itemSlots) {
         mAccountId = accountId;
         mHeroId = heroId;
+        mPlayerSlot = playerSlot;
         mItemSlots = itemSlots;
         mBackPackSlots = backPackSlots;
     }
@@ -21,6 +23,10 @@ public class Player {
 
     public int getHeroId() {
         return mHeroId;
+    }
+
+    public int getPlayerSlot() {
+        return mPlayerSlot;
     }
 
     public int[] getItemSlots() {
