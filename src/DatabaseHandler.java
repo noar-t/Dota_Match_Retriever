@@ -1,4 +1,5 @@
 import java.sql.*;
+import java.util.ArrayList;
 
 /**
  * Created by noah on 7/31/17.
@@ -76,10 +77,25 @@ public class DatabaseHandler {
         return mDatabasePreexist;
     }
 
+    public void databaseAddMatches (ArrayList<Match> matchObjects) throws SQLException {
+        for (Match i : matchObjects) {
+            if (i != null) {
+                this.databaseAddMatch(i);
+                for (Player x : i.getPlayers()) {
+                    this.databaseAddPlayerData(i.getMatchId(), x);
+                }
+            }
+            // TODO need to add player initializations
+            // TODO need to add player datas
+        }
+    }
+
     public void databaseAddMatch(Match match) throws SQLException {
 
         if (match != null) {
             String sql = "INSERT INTO matches(match_id, radiant_win, radiant_score, dire_score, duration) VALUES(?,?,?,?,?)";
+
+            System.out.println("trying to add " + match.getMatchId());
 
             PreparedStatement pstmt = database.prepareStatement(sql);
             pstmt.setLong(1, match.getMatchId());
@@ -175,7 +191,7 @@ public class DatabaseHandler {
         pstmt.setLong(1, player_id);
         ResultSet rs = pstmt.executeQuery();
 
-        return rs.first();
+        return rs.next();
     }
 
     public boolean databaseCheckPlayerData(long player_id, long match_id) throws SQLException {
@@ -186,7 +202,7 @@ public class DatabaseHandler {
         pstmt.setLong(2, match_id);
         ResultSet rs = pstmt.executeQuery();
 
-        return rs.first();
+        return rs.next();
     }
 
     public boolean databaseCheckMatch(long match_id) throws SQLException {
@@ -196,7 +212,11 @@ public class DatabaseHandler {
         pstmt.setLong(1, match_id);
         ResultSet rs = pstmt.executeQuery();
 
-        return rs.first();
+        //testing
+        boolean temp = rs.next();
+        System.out.println("checking match id: " + match_id + "  boolean: " + temp);
+
+        return temp;//rs.next();
     }
 
     public void close() {

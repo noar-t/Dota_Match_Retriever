@@ -27,10 +27,15 @@ public class Main {
         //Match testMatch = new Match(25,true,13,14,null);
         //dbHandler.databaseAddMatch(testMatch);
 
-        if (!dbHandler.databasePreexist())
+        if (!dbHandler.databasePreexist()) {
             populateNewDatabase(dbHandler);
-        else
+            System.out.println("no existing database database");
+        }
+        else {
             updateDatabase(dbHandler);
+            System.out.println("Prexisting database");
+
+        }
 
 
         dbHandler.close();
@@ -89,22 +94,14 @@ public class Main {
                         break;
                     }
                     Thread.sleep(100);
-                    matchObjects.add(getMatchDetails(i));
+                    //matchObjects.add(getMatchDetails(i));
                 }
             }
         }
 
-        if (mMatches != null)
-            for (Long i: mMatches) {
-                if (!dbHandler.databaseCheckMatch(i)) {
-                    tempMatch = getMatchDetails(i);
-                    if (tempMatch != null)
-                        matchObjects.add(tempMatch);
-                }
-                else {
-                    break;
-                }
-            }
+        //for (Match i : matchObjects)
+        //    System.out.println(i);
+        dbHandler.databaseAddMatches(matchObjects);
 
     }
 
@@ -148,16 +145,10 @@ public class Main {
         System.out.println("END TOTAL = " + totalCount
                 + "\nARRAY SIZE = " + matchObjects.size());
 
-        for (Match i : matchObjects) {
-            if (i != null) {
-                dbHandler.databaseAddMatch(i);
-                for (Player x : i.getPlayers()) {
-                    dbHandler.databaseAddPlayerData(i.getMatchId(), x);
-                }
-            }
-            // TODO need to add player initializations
-            // TODO need to add player datas
-        }
+        // TODO need to add player initializations
+        // TODO need to add player data
+
+        dbHandler.databaseAddMatches(matchObjects);
 
 
     }
