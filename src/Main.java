@@ -30,7 +30,7 @@ public class Main {
         if (!dbHandler.databasePreexist())
             populateNewDatabase(dbHandler);
         else
-            //need to handle returning user
+            updateDatabase(dbHandler);
 
 
         dbHandler.close();
@@ -50,6 +50,62 @@ public class Main {
         catch (FileNotFoundException e) {
             System.out.println("File not present or file in wrong directory");
         }
+    }
+
+    // TODO add json parser for user data http://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/?key=api_key&steamids=76561198022041342
+
+    public static void updateDatabase (DatabaseHandler dbHandler) throws Exception{
+        ArrayList<Long> mMatches = null;
+        ArrayList<Match> matchObjects = new ArrayList<>();
+        Match tempMatch = null;
+
+        Document XML = getMatchListXML("https://api.steampowered.com/IDOTA2Match_570/GetMatchHistory/V001/?format=XML&account_id="
+                + mAccountId
+                + "&key="
+                + mApiKey);
+        mMatches = getMatchArrayList(XML); // returns long array of match id
+
+
+        if (mMatches != null) {
+            for (int x = 0; x < 5; x++) {
+                if (x > 0) {
+                    XML = getMatchListXML("https://api.steampowered.com/IDOTA2Match_570/GetMatchHistory/V001/?format=XML&start_at_match_id="
+                            + mMatches.get(mMatches.size() - 1)
+                            + "&account_id="
+                            + mAccountId
+                            + "&key="
+                            + mApiKey);
+                    mMatches = getMatchArrayList(XML);
+                    mMatches.remove(0);
+                }
+                for (Long i : mMatches) {
+                    if (!dbHandler.databaseCheckMatch(i)) {
+                        tempMatch = getMatchDetails(i);
+                        if (tempMatch != null)
+                            matchObjects.add(tempMatch);
+                    }
+                    else {
+                        x = 5; // end loop if we encounter a match present in database
+                        break;
+                    }
+                    Thread.sleep(100);
+                    matchObjects.add(getMatchDetails(i));
+                }
+            }
+        }
+
+        if (mMatches != null)
+            for (Long i: mMatches) {
+                if (!dbHandler.databaseCheckMatch(i)) {
+                    tempMatch = getMatchDetails(i);
+                    if (tempMatch != null)
+                        matchObjects.add(tempMatch);
+                }
+                else {
+                    break;
+                }
+            }
+
     }
 
     public static void populateNewDatabase (DatabaseHandler dbHandler) throws Exception {
@@ -99,8 +155,8 @@ public class Main {
                     dbHandler.databaseAddPlayerData(i.getMatchId(), x);
                 }
             }
-            // need to add player initializations
-            // need to add player datas
+            // TODO need to add player initializations
+            // TODO need to add player datas
         }
 
 
