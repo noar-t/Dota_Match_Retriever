@@ -23,10 +23,6 @@ public class Main {
         getDevValues();
         DatabaseHandler dbHandler = new DatabaseHandler();
 
-        //testing
-        //Match testMatch = new Match(25,true,13,14,null);
-        //dbHandler.databaseAddMatch(testMatch);
-
         if (!dbHandler.databasePreexist()) {
             populateNewDatabase(dbHandler);
             System.out.println("no existing database database");
@@ -34,15 +30,10 @@ public class Main {
         else {
             updateDatabase(dbHandler);
             System.out.println("Prexisting database");
-
         }
 
-
         dbHandler.close();
-
     }
-
-
 
     public static void getDevValues() throws Exception {
         try {
@@ -154,7 +145,7 @@ public class Main {
     }
 
     @Nullable
-    public static Document getMatchListXML(String request) throws Exception {
+    public static Document getMatchListXML(String request) throws Exception{
         try {
             DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
